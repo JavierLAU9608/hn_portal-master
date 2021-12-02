@@ -1,0 +1,140 @@
+{% extends 'base.twig' %}
+
+{% block keywords %}{{ trans('seo_keywords_alojamiento') }}{% endblock %}
+{% block description %}{{ trans('seo_description_alojamiento') }}{% endblock %}
+
+{% block content %}
+<div class="container bg-form">
+    <div id="center_area"  style="padding-top: 200px;" class="content">
+        <div id="form_reserva_evento" class="form border_drk">
+            {% if producto.options.aconfirmar == 1 %}
+                <span class="black right"><b>{{ trans('reserva_a_confirmar') }}</b></span>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <h2>{{ trans('alojamiento') }}</h2>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="verdana detail"><b>{{ trans('al_cantidad_habitaciones') }}:</b></label>
+                    <label class="verdana detail">
+                        {{ producto.options.habitaciones|length }}
+                    </label>
+                </div>
+            </div>
+
+            {% for h in producto.options.habitaciones %}
+            <div class="row">
+                <div class="col-sm-6">
+                    {% set tipo_habitacion = app_get_tipo_habitacion(h.tipo_habitacion) %}
+                    {% set tipo_habitacion_nombre = app_traduccion('hotel','hotel_tipo_hab_idioma','nombre','tipo_habitacion_fk',tipo_habitacion.id,tipo_habitacion.nombre_habitacion) %}
+             
+                    <label><b>{{ trans('al_habitacion') }}: {{  loop.index }}</b></label><br/>
+                    <label class="verdana detail">{{  tipo_habitacion_nombre }}</label><br/>
+                </div>
+                <div class="col-sm-6">
+                    <label><b>{{ trans('al_fecha_entrada') }}:</b></label><br/>
+                    <label class="verdana detail">{{  h.fecha|date('Y-m-d') }}</label><br/>
+                </div>
+            </div>
+
+            {% set b2b = app.user.id_tipo_cliente ? true : false %}
+            {% if b2b == true %}
+            <div class="row">
+                <div class="col-sm-6">
+                    <label><b>{{ trans('responsable_hab_nombre') }}:</b></label><br/>
+                    <label class="verdana detail">{{  h.responsable_nombre }}</label><br/>
+                </div>
+                <div class="col-sm-6">
+                    <label><b>{{ trans('responsable_hab_pasaporte') }}:</b></label><br/>
+                    <label class="verdana detail">{{  h.responsable_pasaporte }}</label><br/>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label><b>{{ trans('al_hora_entrada') }}:</b></label><br/>
+                    <label class="verdana detail">{{  h.hora }}</label><br/>
+                </div>
+                <div class="col-sm-6">
+                    {% set plan_alimentacion = app_get_plan_alimentacion(h.plan) %}
+                    {% set plan_nombre = app_traduccion('hotel','hotel_plan_idioma',null,'plan_fk',plan_alimentacion.id,plan_alimentacion.nombre_plan) %}
+
+                    <label><b>{{ trans('al_plan_alojamiento') }}:</b></label><br/>
+                    <label class="verdana detail">{{  plan_nombre.nombre ~ ' ('~ plan_nombre.descripcion~ ')' }}</label><br/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label><b>{{ trans('al_pax') }}:</b></label><br/>
+                    <label class="verdana detail">{{  app_get_pax_opc(nuevos_paxs, h.paxs) }}</label><br/>
+                </div>
+                <div class="col-sm-6">
+                    <label><b>{{ trans('al_cantidad_noches') }}:</b></label><br/>
+                    <label class="verdana detail">{{  h.noches }}</label><br/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    {% if h.paquete_luna_miel > 0 %}
+                    {% set paquete_luna_miel = app_get_paquete_luna_miel(h.paquete_luna_miel) %}
+                    {% set paquete_luna_miel_nombre = app_traduccion('hotel','hotel_pack_idioma','nombre','pack_fk',paquete_luna_miel.id,paquete_luna_miel.nombre) %}
+
+                        <label><b>{{ trans('al_paquete_luna_miel') }}</b>:</label><br/>
+                        <label class="verdana detail">{{ paquete_luna_miel_nombre }}</label><br/>
+                
+                    {% endif %}
+                </div>
+                <div class="col-sm-6">
+                    {% if h.ninno_adicional != 'f' and h.ninno_adicional|default %}
+                    <label class="verdana detail"><b>{{ trans('al_ninno_adicional') }}</b></label><br/>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <hr/>
+                </div>
+            </div>
+            {% endfor %}
+
+
+            {% if producto.options.detalles != '' %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>{{ trans('detalles_adicionales') }}</label>
+                        <br/>
+                        {{ producto.options.detalles }}
+                    </div>
+
+                    <div class="col-sm-12">
+                        <hr/>
+                    </div>
+                </div>
+            {% endif %}
+     
+        <div class="precio_reserva">
+            <p class="verdana text-price-box text-black">{{ trans('pagar') }}: {{  app_rate_cambio(producto.price,'smb') }}</p>
+
+            <a class="btn btn-default circle buttom roman" href="{{  base_url(trans('ruta_carro_compra_editar',{'rowid':producto.rowid})) }}"  title="{{ trans('anterior') }}">
+                {{ trans('anterior') }}
+            </a>
+            <a class="btn btn-default circle buttom roman"  title="{{ trans('cancelar') }}" href="{{  base_url(trans('ruta_carro_compra_cancelar', {'rowid':producto.rowid})) }}">
+                {{ trans('cancelar') }}
+            </a>
+            <a class="btn btn-default circle buttom roman" href="{{  base_url(trans('ruta_carro_compra')) }}" title="{{ trans('ver_carrito') }}">
+                {{ trans('ver_carrito') }}
+            </a>
+        </div>
+        <br class="clean" /><br/>
+    </div>
+</div>
+</div>
+{% endblock %}

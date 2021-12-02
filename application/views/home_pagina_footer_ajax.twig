@@ -1,0 +1,16 @@
+
+{% set pie_traduccion = app_traduccion('frontend','frontend_menupie_idioma',NULL,'menu_footer_fk', pagina_footer.id, pagina_footer) %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>{{ pie_traduccion.nombre }}</h1>
+                <hr/>
+            </div>
+            <div class="col-sm-12">
+                {{ pie_traduccion.descripcion|raw }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

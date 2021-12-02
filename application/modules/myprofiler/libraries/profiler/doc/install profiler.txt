@@ -1,0 +1,76 @@
+----------------------------------------------------------------------
+---             Configurar usando HMVC + Twig                      ---
+----------------------------------------------------------------------
+
+1- Copiar el módulo myprofiler a la carpeta de módulos (modules)
+2- Configurar opciones de modules/myprofiler/config/config.php
+3- Agregar al método que envía los correos (Mailer/send) al inicio
+
+    if (ENVIRONMENT == 'development') {
+        try {
+            $CI = &get_instance();
+            $CI->myprofilerlib->addMail($to, $subject, $htmlBody);
+        } catch (Exception $e) {
+        }
+
+        return true;
+    }
+
+6- Agregar a la función de traducción (app_helper/trans) antes del return
+
+    if (ENVIRONMENT == 'development') {
+        // guardar en el profiler la traducción que falta
+        if (false === $line) {
+            try {
+                $CI->myprofilerlib->addLang($key, $key);
+            } catch (Exception $e) {
+            }
+        }
+    }
+
+7- al configurar Twig agregar la ruta de las vistas del módulo myprofiler así como las funciones
+
+    // agregar estas funciones en modo desarrollo
+    if (ENVIRONMENT == 'development') {
+        $config_twig['functions'][] = 'elapseTime';
+        $config_twig['functions'][] = 'getProfilerResumen';
+        $config_twig['paths'][] = APPPATH . 'modules/myprofiler/views/';
+    }
+    antes de: $this->load->library('twig', $config_twig);
+
+8- Agregar a la clase BASE de los controladores
+     // guardar las queries si la petición es ajax, sino se guardan cuando la bar ejecuta getProfilerResumen()
+     function __destruct()
+     {
+         if (ENVIRONMENT == 'development') {
+             // si la petición fue por ajax guardar las queries
+             if ($this->input->is_ajax_request()){
+                 $this->myprofilerlib->addQueries($this->db->queries, $this->db->query_times);
+             }
+         }
+     }
+9- Agregar a base.twig
+
+    {% if app.env == 'development' %}
+        {% include('bar/bar.twig') %}
+    {% endif %}
+
+10- Asegúrese de tener en application/config/autoload
+    $autoload['libraries'] = array('database');
+    $autoload['helper'] = array('url');
+
+11- tenga configurado correctamente el acceso a la bd en application/config/database
+
+12- Use bootstrap en su proyecto para que la barra se vea correctamente
+
+----------------------------------------------------------------------
+---             Configurar usando CI por limpio                    ---
+----------------------------------------------------------------------
+
+1- copiar Myprofiler.php en la carpeta controllers
+2- copiar libraries/profiler en la carpeta libraries
+3- copiar el contenido de views en la carpeta views/myprofiler
+4- copiar profiler_helper.php en la carpeta helpers
+5- modificar config/autoload.php de tu app añadiendo los elementos de myprofiler/config/autoload.php
+6- copiar myprofiler.ph en la carpeta config
+7- ...

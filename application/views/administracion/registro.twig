@@ -1,0 +1,83 @@
+<!-- Modal -->
+<div class="modal fade" id="registerform" tabindex="-1" role="dialog" aria-labelledby="registerformLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			{{ form_open('#', {'id' :'form_registro', 'class' :'form-horizontal'}) }}
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="registerformLabel">{{ trans('registrarse_en') }}
+					- {{ trans('hotel_nacional_cuba') }}</h4>
+			</div>
+			<div class="modal-body">
+				<div id="registro_msg"></div>
+				<div class="form-group">
+					<label for="register_correo" class="col-sm-2 control-label">{{ trans('correo') }}</label>
+					<div class="col-sm-10">
+						<input type="email" required="required" name="correo" class="form-control correo" id="register_correo" placeholder="{{ trans('correo') }}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="register_nombre" class="col-sm-2 control-label">{{ trans('nombre_completo') }}</label>
+					<div class="col-sm-10">
+						<input type="text" required="required" name="nombre" class="form-control" id="register_nombre" placeholder="{{ trans('nombre_completo') }}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="register_password" class="col-sm-2 control-label">{{ trans('contrasenna') }}</label>
+					<div class="col-sm-10">
+						<input type="password" required="required" name="password" class="form-control" id="register_password" placeholder="{{ trans('contrasenna') }}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="passport" class="col-sm-2 control-label">{{ trans('pasaporte') }}</label>
+					<div class="col-sm-10">
+						<input type="text" required="required" name="passport" class="form-control" id="passport" placeholder="{{ trans('pasaporte') }}">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="pais_fk" class="col-sm-2 control-label">{{ trans('user_pais') }}</label>
+					<div class="col-sm-10">
+						<select name="pais_fk" id="pais_fk" class="form-control" required="required">
+							<option value="">{{ trans('seleccione_pais') }}</option>
+							{% for p in app.countries %}
+								<option value="{{ p.id }}">{{ p.nombre_trad != null ? p.nombre_trad : p.nombre }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="checkbox">
+							<label class="control-label">
+								<input required="required" type="checkbox" name="politica"> {{ trans('texto_aceptar_terminos_condiciones')|raw }}
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="checkbox">
+							<label class="control-label">
+								<input type="checkbox" name="subscribirme"> {{ trans('subscripcion_deseo_subscribirme')|raw}}
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<input type="submit" class="btn btn-default" value="{{ trans('Registrarme') }}"/>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>

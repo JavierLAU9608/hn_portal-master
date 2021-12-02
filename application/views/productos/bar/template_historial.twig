@@ -1,0 +1,36 @@
+{% set bar = app_get_bar(datos_adicionales.id_bar) %}
+{% set menu_reservado = app_get_bar_menu(datos_adicionales.id_menu) %}
+{% set horario_reservado = app_get_bar_duracion(datos_adicionales.id_duracion) %}
+
+<div class="row">
+	<div class="col-sm-4">
+		{{ trans('serivicio_nombre', {'nombre': trans('bar')}) }}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('bar') }}: {{ bar.nombre }}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('br_dia_reservacion') }}: {{ app_str_date(datos_adicionales.fecha) }}
+		{{ trans('br_menu') }}: {{ menu_reservado.nombre }}
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-4">
+		{{ datos_adicionales.no_reserva }}
+	</div>
+
+	<div class="col-sm-4">
+		{% if datos_adicionales.estado == 4 %}
+			<a href="{{ trans('ruta_voucher_producto', {'producto':datos_adicionales.tipo,'id':datos_adicionales.id_reserva}) }}" >{{ trans('voucher') }}</a>
+			{% if datos_adicionales.fecha > app_now() %}
+				<a class="btn btn-default" href="{{ trans('ruta_cancelar_producto_pagado',{'producto':datos_adicionales.tipo,'id':datos_adicionales.id_reserva}) }}" >{{ trans('cancelar') }}</a>
+			{% endif %}
+		{% endif %}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('precio') }}: {{ app_rate_cambio(producto.price,'smb') }}
+	</div>
+</div>
+
+<hr/>

@@ -1,0 +1,13 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="padding-top: 200px;">
+            <div class="col-sm-12">
+                <h1>{{ trans('error_404_encabezado') }}</h1>
+                <p>{{ url }}</p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

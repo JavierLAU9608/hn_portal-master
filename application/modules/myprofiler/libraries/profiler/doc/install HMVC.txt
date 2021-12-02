@@ -1,0 +1,10 @@
+1- Copiar en la carpeta application/core
+    Base_Router.php
+    Base_Loader.php
+
+2- Cambiar en application/config o renombrar las clases del paso 1 a My_Router.php, My_Loader.php
+    $config['subclass_prefix'] = 'Base_';
+
+3- Copiar en third_party la carpeta MX
+
+A partir de este punto el proyecto ya es HMVC, la carpeta application/modules es la carpeta por defecto de los módulos

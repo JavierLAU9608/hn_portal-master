@@ -1,0 +1,76 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="padding-top: 200px;">
+        <div class="col-sm-3 blog-sidebar">
+            <ul class="nav sidebar-categories">
+                {% for key,item in items %}
+                    {% if item.url != '' %}
+                        <li>
+                            {% if app.user %}
+                                <a href="{{ base_url(item.url) }}">{{ item.titulo }}</a>
+                            {% else %}
+                                <a href="{{ base_url('login-page')~'/'~item.url }}">{{ item.titulo }}</a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-sm-9 bg-form">
+            <h1 class="text-price">{{ trans('carro_compra_cantidad_productos', {'cantidad':total_productos}) }}</h1>
+            <hr/>
+            <div class="row ">
+                <div class="col-sm-12">
+                    {% if total_productos>0 %}
+                        {% set importe_a_confirmar = 0 %}
+                        {% set importe_a_pagar = 0 %}
+                        {% for producto in lista_productos_carro %}
+                            {{ producto.options.template_car|raw }}
+                            {% if producto.options.aconfirmar == 1 %}
+                                {% set importe_a_confirmar = importe_a_confirmar + producto.price %}
+                            {% else %}
+                                {% set importe_a_pagar = importe_a_pagar + producto.price %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                {% if total_productos>0 %}
+                    <div class="col-sm-3">
+                        <a class="btn btn-default-booking circle buttom roman no_margen" href="{{ trans('ruta_datos_reserva') }}">{{ trans('carro_compra_continuar') }}</a>
+                    </div>
+                {% endif %}
+
+{#                <div class="col-sm-3">#}
+{#                    <div class="precio_reserva pull-right">#}
+{#                        <p class="verdana text-price-box text-black">{{ trans('importe_a_confirmar') }}</p>#}
+
+{#                        <p class="verdana yellow_lite text-price-hab text-white">{{ app_rate_cambio(importe_a_confirmar,'smb') }}</p>#}
+
+{#                    </div>#}
+{#                </div>#}
+
+{#                <div class="col-sm-3">#}
+{#                    <div class="precio_reserva pull-right">#}
+{#                        <p class="verdana text-price-box text-black">{{ trans('importe_total') }}</p>#}
+
+{#                        <p class="verdana yellow_lite text-price-hab text-white">{{ app_rate_cambio(total_monto,'smb') }}</p>#}
+{#                    </div>#}
+{#                </div>#}
+
+                <div class="col-sm-3 col-sm-offset-9">
+                    <div class="precio_reserva pull-right">
+                        <p class="verdana text-price-box text-black">{{ trans('importe_a_pagar') }}</p>
+
+                        <p class="verdana yellow_bg text-price-hab text-white">{{ app_rate_cambio(importe_a_pagar,'smb') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

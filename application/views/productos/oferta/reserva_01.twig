@@ -1,0 +1,227 @@
+{% extends 'base.twig' %}
+
+{% set oferta_traducido = app_traduccion('oferta','oferta_idioma',NULL,'oferta_fk',oferta.id,oferta) %}
+{% set oferta_tipo_traducido = app_traduccion('oferta','oferta_tipo_idioma',NULL,'tipo_fk',oferta.tipo_fk,oferta.tipo) %}
+{% set oferta_traducido_description = oferta_traducido.description|default(oferta_traducido.descripcion) %}
+
+{% block stylesheet %}
+    <link href="web/css/jquery-bootstrap-datepicker.css" rel="stylesheet">
+{% endblock %}
+
+{% block keywords %}{{ trans('seo_keywords_ofertas') }}{% endblock %}
+{% block description %}{{ trans('seo_description_ofertas') }}{% endblock %}
+
+{% block content %}
+<div class="container bg-form padding-bottom-20">
+    <div  id="capa_reserva_oferta" class="row content" style="padding-top: 200px">
+        <div class="col-sm-12">
+            {{ form_open(base_url('con_oferta/crear_reserva'), {'id':"form_reserva_oferta", 'class':'form-vertical', 'onSubmit':'return validar()'}) }}
+            <input type="hidden" name="id_oferta" value="{{ oferta.id }}"/>
+
+            {% if boda == true %}
+            <input type="hidden" name="is_boda" value="1"/>
+            {% endif %}
+
+            {% if oferta.confirmacion_online == 'f' %}
+                {{ trans("reserva_a_confirmar") }}
+                <input type="hidden" name="aconfirmar" value="1"/>
+            {% endif %}
+
+            {% if key_car_reserva %}
+                <input  type="hidden" name="key_car_reserva" value="{{ key_car_reserva }}"/>
+            {% endif %}
+
+
+
+            <div class="row margin-right-0">
+                <h2>{{ trans('oferta') }}</h2>
+                <div class="col-sm-12 margin-top-20 margin-bottom-30">
+                    <h4 class="text-center">{{ oferta_tipo_traducido.nombre }} - {{ oferta_traducido.nombre }}</h4>
+
+                    <div class="text-center" style="margin-top: 10px;">
+                        {{ oferta_traducido_description|raw }}
+                    </div>
+                </div>
+
+                <div id="oferta_msg_error" class="col-sm-12">
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">{{ trans('of_fecha') }}</label>
+                        <input type="text" class="input_cal fecha form-control" id="fecha" name="fecha" required="required" autocomplete="off"/>
+                    </div>
+                </div>
+
+                {% if boda == false %}
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">{{ trans('of_cantidad') }}</label>
+                        <select name="cantidad" id="cantidad" class="input_cal form-control" required="required" >
+                            {% for i in 1..oferta.maximo_reservar %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label">{{ trans('of_cantidad_dias') }}</label>
+                        <select name="cantidad_dias" id="cantidad_dias" class="input_cal form-control" required="required" >
+                            {% for i in 1..cant_dias %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="control-label">{{ trans('of_solicitud_adicional') }}</label>
+                        <textarea rows="5" id="detalles_oferta" class="form-control" name="detalles"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="precio_reserva row margin-left-0 margin-right-0">
+                <div class="col-sm-12">
+                    <p class="verdana text-price">{{ trans('precio') }}
+                        <span class="precio_reservacion text-price text-white">
+                    {% if key_car_reserva %}
+                        {{ app_rate_cambio(reserva.price,'smb') }}
+                    {% endif %}
+                </span>
+                    </p>
+
+                    <input class="btn btn-default circle buttom roman" type="submit" name="btn_continuar" value="{{ trans('continuar') }}">
+                    <input class="btn btn-default circle buttom roman" type="submit" name="btn_cancelar" value="{{ trans('cancelar') }}">
+                </div>
+            </div>
+
+            {% if flash_error %}
+            <div class="alert alert-danger">
+                {{ flash_error }}
+            </div>
+            {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="web/assets/jquery-ui/jquery.ui.datepicker-min.js"></script>
+    <script src="web/assets/jquery-ui/jquery.ui.core-min.js"></script>
+    <script src="web/assets/jquery-ui/i18n/jquery.ui.datepicker-{{ app.current_lang.codigo|lower }}.js"></script>
+
+    <script language="javascript" type="application/javascript">
+        var closedDates = {{ oferta.paros|json_encode|raw }};
+
+        var _convertDate = function (date) {
+            var fecha;
+            try {
+                // mozilla
+                fecha = date.toLocaleFormat("%Y-%m-%d");
+            } catch (e) {
+                // chrome & ?..
+                var m = date.getMonth() + 1; // chrome devuelve el mes mal (decrementado en 1, porque??)
+                m = m < 10 ? '0' + m : m; // 2 dígitos
+                var d = date.getDate();
+                d = d < 10 ? '0' + d : d; // 2 dígitos
+                fecha = date.getFullYear() + '-' + m + '-' + d;
+            }
+
+            return fecha;
+        };
+
+        $("#fecha").datepicker({"dateFormat":"yy-mm-dd",minDate:'{{ oferta.fecha_rinicio }}',
+            maxDate:'{{ oferta.fecha_rfin }}'
+
+            {% if oferta.dias_disponibles %}
+            ,  beforeShowDay: function (_day) {
+                var day = _day.getDay();
+
+                if ({{ cadena_if }}) {
+                    var fecha = _convertDate(_day);
+
+                    for (i = 0; i < closedDates.length; i++) {
+                        var fechaMin = closedDates[i][0];
+                        var fechaMax = closedDates[i][1];
+
+                        if (fecha >= fechaMin && fecha <= fechaMax) {
+                            return [false, ""];
+                        }
+                    }
+
+                    return [true, ""];
+                } else {
+                    return [false, ""];
+                }
+            }
+            {% else %}
+            ,  beforeShowDay: function (_day) {
+
+                var fecha = _convertDate(_day);
+
+                for (i = 0; i < closedDates.length; i++) {
+                    var fechaMin = closedDates[i][0];
+                    var fechaMax = closedDates[i][1];
+
+                    if (fecha >= fechaMin && fecha <= fechaMax) {
+                        return [false, ""];
+                    }
+                }
+                return [true, ""];
+            }
+            {% endif %}
+        }, $.datepicker.regional['EN']);
+
+        $(".input_cal").change(function() {
+            $.ajax({
+                'url':  'con_oferta/calcular',
+                'data': $("#form_reserva_oferta").serialize(),
+                'dataType': 'json',
+                'type': 'POST',
+                'beforeSend': function(){
+                    $('#oferta_msg_error').html('') ;
+                    Nacional.startLoading($('#capa_reserva_oferta'));
+                },
+                'success': function(data) {
+                    if(data.ok == 't')
+                    {
+                        $('.precio_reservacion').html(data.precio);
+                    }
+                    else
+                    {
+                        $('.precio_reservacion').html('');
+                        $('#oferta_msg_error').html('<div class="form_msg alert alert-danger">'+data.msg+'</div>') ;
+                    }
+                    Nacional.stopLoading($('#capa_reserva_oferta'));
+                }
+            });
+        });
+
+        function validar()
+        {
+            var offerta = $('#oferta_msg_error');
+            offerta.html('') ;
+
+            if($('.precio_reservacion').html()!=='')
+                return true;
+
+            offerta.html('<div class="form_msg alert alert-danger">{{ trans('al_error_reserva_incorrecta') }}</div>') ;
+            return false;
+        }
+
+        {% if key_car_reserva %}
+        $('#cantidad').val('{{ reserva.options.cantidad }}');
+        $('#cantidad_dias').val('{{ reserva.options.cantidad_dias }}');
+        $('#fecha').val('{{ reserva.options.fecha }}');
+        $('#detalles_oferta').val('{{ reserva.options.detalles }}');
+        {% endif %}
+
+    </script>
+{% endblock %}
+

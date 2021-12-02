@@ -1,0 +1,15 @@
+
+{% set oferta_traducido = app_traduccion('oferta','oferta_idioma',NULL,'oferta_fk',oferta.id,oferta) %}
+{% set oferta_tipo_traducido = app_traduccion('oferta','oferta_tipo_idioma',NULL,'tipo_fk',oferta.tipo_fk,oferta.tipo) %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <h4>{{ oferta_traducido.nombre }}</h4>
+            <p>{{ oferta_traducido.descripcion|raw }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

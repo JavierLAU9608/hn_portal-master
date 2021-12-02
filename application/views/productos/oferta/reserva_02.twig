@@ -1,0 +1,50 @@
+{% extends 'base.twig' %}
+
+{% set oferta_traducido = app_traduccion('oferta','oferta_idioma',NULL,'oferta_fk',oferta.id,oferta) %}
+{% set oferta_tipo_traducido = app_traduccion('oferta','oferta_tipo_idioma',NULL,'tipo_fk',oferta.tipo_fk,oferta.tipo) %}
+
+{% block keywords %}{{ trans('seo_keywords_ofertas') }}{% endblock %}
+{% block description %}{{ trans('seo_description_ofertas') }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row bg-form padding-bottom-20" style="padding-top: 200px">
+        <div class="col-sm-12">
+            {% if producto.options.aconfirmar == 1 %}
+                {{ trans('reserva_a_confirmar') }}
+            {% endif %}
+            
+            <h4 class="text-price-hab">{{ oferta_tipo_traducido.nombre }} - {{ oferta_traducido.nombre }}</h4>
+
+            <br/><br/>
+            {{ trans('of_fecha') }}: {{ app_str_date(producto.options.fecha) }}<br/>
+
+            {% if is_boda == false %}
+                {{ trans('of_cantidad') }}: {{ producto.options.cantidad }}<br/>
+                {{ trans('of_cantidad_dias') }}: {{ producto.options.cantidad_dias }}<br/>
+            {% else %}
+                <br><br>
+            {% endif %}
+
+
+            {% if producto.options.detalles %}
+                {{ trans('of_solicitud_adicional') }}: <br/>
+                {{ producto.options.detalles }}<br/>
+            {% endif %}
+            
+            <span class="text-price-hab">{{ trans('pagar') }}:</span> <span class="text-price-hab text-white">{{ app_rate_cambio(producto.price,'smb') }}</span><br/><br/>
+
+           
+            <a class="btn btn-default circle" href="{{ base_url(trans('ruta_carro_compra_editar',{'rowid':producto.rowid})) }}">
+                {{ trans('anterior') }}
+            </a>
+            <a class="btn btn-default circle" href="{{ base_url(trans('ruta_carro_compra_cancelar',{'rowid':producto.rowid})) }}">
+                {{ trans('cancelar') }}
+            </a>
+            <a class="btn btn-default circle" href="{{ base_url(trans('ruta_carro_compra')) }}">
+                {{ trans('ver_carrito') }}
+            </a>           
+        </div>
+    </div>
+</div>
+{% endblock %}

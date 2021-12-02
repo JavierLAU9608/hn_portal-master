@@ -1,0 +1,150 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container">
+{{ form_open(base_url('con_reservacion/confirmar_pagar'), {'id' : 'form_detalles_reserva'}) }}
+    <div class="row" style="padding-top: 200px;">
+        <div class="col-sm-12">
+            {{ trans('al_texto_intro_reserva')|raw  }}
+            <a target="_blank" href="{{ base_url('informacion/Reservar-y-pagar') }}">{{ trans('al_texto_intro_reserva_link') }}</a>
+        </div>
+
+        <div class="col-sm-12">
+            {% if existen_productos_no_confirmar  %}
+                {{ trans('reservaciones') }} {{ trans('reserva_a_confirmar') }}
+                {% for forma_pago in formas_pago %}
+                    <input type="hidden" name="forma_pago" value="{{ forma_pago.id }}"/>
+                {% endfor %}
+            {% else %}
+                {% if formas_pago|default(false) %}
+                    {{ trans('reserva_forma_pago') }}
+                    <ol style="list-style-type:none">
+                        {% for forma_pago in formas_pago %}
+                            <li>
+                                <label>
+                                    <input {{ forma_pago.predeterminado == 't' ? 'checked="checked"' }} type="radio" name="forma_pago" value="{{ forma_pago.id }}" />
+                                    {{ forma_pago.descripcion }}
+                                </label>
+                            </li>
+                        {% endfor %}
+
+                    </ol>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div class="col-sm-12">
+        {% if flash_error %}
+            <div class="alert alert-danger">
+                {{ flash_error|raw }}
+            </div>
+        {% endif %}
+        </div>
+
+
+        <div class="col-sm-12">
+            {{ trans('al_cards') }}
+
+            {% for tarj in tarjetas if tarj != 11 %}
+                <label class="radio-inline">
+                    <div class="radio">
+                        <span class="">
+                            <input required="required" type="radio" value="{{ tarj }}" name="optionsRadios">
+                        </span>
+                    </div>
+                    <img height='50' src="web/img/tarjetas/{{ tarj }}.jpg"/>
+                </label>
+            {% endfor %}
+        </div>
+
+        <div class="col-sm-12">
+        <br/>
+            <input name="titular_diferente" id="titular_diferente" type="checkbox" {{ marcado_regalo ? 'checked="checked"' }} value="1"/>
+            <label for="titular_diferente">{{ trans('titular_diferente') }}</label>
+        </div>
+
+
+        <div class="col-sm-6" id="titular_reserva">
+            <h3>{{ trans('titular_reserva') }}</h3>
+
+            <label for="nombre_titular">{{ trans('nombre_apellidos') }} *</label><br/>
+            <input required="required" type="text" value="{{ usuario.nombre_titular ? usuario.nombre_titular : usuario.nombre }}" name="nombre_titular" class="numeros_letras form-control"/>
+
+            <br/>
+            <label for="pais_titular">{{ trans('pais_residencia') }} *</label><br/>
+            <select class="form-control" required="required" name="pais_titular">
+                <option value="">{{ trans('seleccione_pais') }}</option>
+                {% for p in paises %}
+                    <option {{ usuario.pais_fk == p.id ? 'selected="selected"' }} value="{{ p.id }}">{{ p.nombre_trad ?? p.nombre  }}</option>
+                {% endfor %}
+            </select>
+
+            <br/>
+            <label for="pasaporte_titular">{{ trans('pasaporte') }} *</label><br/>
+            <input required="required" type="text" value="{{ usuario.pasaporte_titular ?? usuario.pasaporte }}" name="pasaporte_titular" class="numeros_letras form-control"/>
+
+            <br/>
+            <label for="email_titular">{{ trans('email') }} *</label><br/>
+            <input required="required" type="email" value="{{ usuario.email_titular ?? usuario.correo }}" name="email_titular" class="correo form-control"/>
+
+            <br/>
+            <label for="telefono_titular">{{ trans('telefono') }}</label><br/>
+            <input type="text" value="{{ usuario.telefono_titular ?? usuario.telefono_titular }}" name="telefono_titular" class="solo_numeros form-control"/>
+        </div>
+
+        <div class="col-sm-6" id="titular_tarjeta" style="display: none">
+            <h3>{{ trans('titular_tarjeta_credito') }}</h3>
+
+            <label for="nombre_titular_tarjeta">{{ trans('nombre_apellidos') }} *</label><br/>
+            <input type="text" value="{{ usuario.nombre_titular ? usuario.nombre_titular : usuario.nombre }}" name="nombre_titular_tarjeta" class="form-control numeros_letras"/>
+
+            <br/>
+            <label for="pais_titular_tarjeta">{{ trans('pais_residencia') }} *</label><br/>
+            <select class="form-control" name="pais_titular_tarjeta">
+                <option value="">{{ trans('seleccione_pais') }}</option>
+                {% for p in paises %}
+                    <option {{ usuario.pais_titular_tarjeta == p.id ? 'selected="selected"' }} value="{{ p.id }}">{{ p.nombre_trad ?? p.nombre  }}</option>
+                {% endfor %}
+            </select>
+
+            <br/>
+            <label for="pasaporte_titular_tarjeta">{{ trans('pasaporte') }} *</label><br/>
+            <input type="text" value="{{ usuario.pasaporte_titular_tarjeta }}" name="pasaporte_titular_tarjeta" class="numeros_letras form-control"/>
+
+            <br/>
+            <label for="email_titular_tarjeta">{{ trans('email') }} *</label><br/>
+            <input type="email" value="{{ usuario.email_titular_tarjeta }}" name="email_titular_tarjeta" class="correo form-control"/>
+
+            <br/>
+            <label for="telefono_titular_tarjeta">{{ trans('telefono') }}</label><br/>
+            <input type="text" value="{{ usuario.telefono_titular_tarjeta }}" name="telefono_titular" class="solo_numeros form-control"/>
+
+            <br/> * {{  trans('requerido') }}
+        </div>
+
+        <div class="col-sm-12">
+        <br/>
+            <a href="{{ base_url('noticias/garantizamos-la-seguridad-de-sus-pagos/15') }}" target="_blank">{{ trans('texto_garantizamos_seguridad')|raw }}</a>
+
+            <br/>
+            <input required="required" type="checkbox" name="aceptar_terminos" id="aceptar_terminos" value="1" style="margin-right:20px;"/>
+            <label id="texto_aceptar_terminos" for="aceptar_terminos">
+                {{ trans('texto_aceptar_terminos_condiciones')|raw }}
+            </label>
+
+            <br/>
+            <input type="submit" name="btn_confirmar_y_pagar" value="{{ trans('continuar') }}" class="btn btn-default roman" />
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script language="javascript" type="application/javascript">
+        $("#titular_diferente").click(function(){
+            $("#titular_tarjeta").toggle();
+        });
+    </script>
+{% endblock script %}
+

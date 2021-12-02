@@ -1,0 +1,34 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container bg-form padding-bottom-20">
+	<div id="center_area" style="padding-top: 200px;" class="content">
+{#		{{dump(reserva)}}#}
+		{{ form_open() }}
+		<div class="row">
+			{% for r in reserva %}
+				<div class="col-sm-4">
+					<label for="">Fecha: {{ r.fecha_entrada }}</label>
+					<span class="form-control">Hab: {{ r.nombre_habitacion }}</span>
+				</div>
+				<div class="col-sm-4">
+					<label for="">{{ trans('responsable_hab_nombre') }}</label>
+					<input value="{{ r.responsable_nombre }}" class="form-control" required name="nombre[]" type="text">
+				</div>
+				<div class="col-sm-4">
+					<label for="">{{ trans('responsable_hab_pasaporte') }}</label>
+					<input value="{{ r.responsable_pasaporte }}" class="form-control" required name="pasaporte[]" type="text">
+				</div>
+			{% endfor %}
+
+			<div class="col-sm-12">
+				<div class="margin-top-10">
+					<button class="btn btn-primary" type="submit">{{ trans('continuar') }}</button>
+					<a href="{{ base_url('cuenta/historial') }}" class="btn btn-default">{{ trans('cancelar') }}</a>
+				</div>
+			</div>
+	     </div>
+		{{ form_close() }}
+	</div>
+</div>
+{% endblock %}

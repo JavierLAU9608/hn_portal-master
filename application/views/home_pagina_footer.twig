@@ -1,0 +1,19 @@
+{% extends 'base.twig' %}
+
+{% set pie_traduccion = app_traduccion('frontend','frontend_menupie_idioma',NULL,'menu_footer_fk', pagina_footer.id, pagina_footer) %}
+
+{% block keywords %}{{ pie_traduccion.description }}{% endblock %}
+{% block description %}{{ pie_traduccion.keywords }}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="padding-top: 200px;">
+            <div class="col-sm-3 blog-sidebar">
+                {{ menu_vertical({'items':items,'item_activo':item_activo}) }}
+            </div>
+            <div class="col-sm-9">
+                {{ pie_traduccion.descripcion|raw }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

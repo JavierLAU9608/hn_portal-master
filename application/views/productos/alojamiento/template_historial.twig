@@ -1,0 +1,40 @@
+<div class="row">
+	<div class="col-sm-4">
+		{{ trans('serivicio_nombre', {'nombre': trans('alojamiento')}) }}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('al_cantidad_habitaciones') }}: {{ datos_adicionales.habitaciones|length }}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('rt_dia_reservacion') }}: {{ app_str_date(datos_adicionales.fecha) }}
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-4">
+		{{ datos_adicionales.no_reserva }}
+	</div>
+	<div class="col-sm-4">
+		{% if datos_adicionales.estado == 4 %}
+			<a class="btn btn-default" href="{{ trans('ruta_voucher_producto', {'producto':datos_adicionales.tipo,'id':datos_adicionales.id_reserva}) }}" >
+				<i class="fa fa-file-pdf-o"></i> {{ trans('voucher') }}
+			</a>
+
+			{% set b2b = app.user.id_tipo_cliente ? true : false %}
+			{% if b2b %}
+				<a href="{{ base_url('con_alojamiento/modificar_responsable/' ~ datos_adicionales.id_reserva) }}" class="btn btn-default"><i class="fa fa-edit"></i> Editar</a>
+			{% endif %}
+
+			{% if datos_adicionales.fecha > app_now() %}
+				<a class="btn btn-danger" href="{{ trans('ruta_cancelar_producto_pagado',{'producto':datos_adicionales.tipo,'id':datos_adicionales.id_reserva}) }}" >
+					<i class="fa fa-trash"></i>  {{ trans('cancelar') }}
+				</a>
+			{% endif %}
+		{% endif %}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('precio') }}: {{ app_rate_cambio(producto.price,'smb') }}
+	</div>
+</div>
+
+<hr/>

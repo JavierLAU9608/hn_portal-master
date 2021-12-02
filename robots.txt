@@ -1,0 +1,19 @@
+###
+# robots.txt file created at http://www.yellowpipe.com
+# For domain: https://www.hotelnacional-decuba.com/
+###
+
+User-agent: *
+Disallow: https://www.hotelnacional-decuba.com/web/img/
+
+User-agent: *
+Disallow: https://www.hotelnacional-decuba.com/web/css/
+
+User-agent: *
+Disallow: https://www.hotelnacional-decuba.com/web/js/
+
+User-agent: *
+Disallow: https://www.hotelnacional-decuba.com/con_reservacion/info_pago_pasarela_aceptado
+
+User-agent: *
+Sitemap: https://www.hotelnacional-decuba.com/sitemap.xml

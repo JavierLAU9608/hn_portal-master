@@ -1,0 +1,13 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="padding-top: 200px;">
+        <div class="col-sm-12">
+            <div class="alert alert-danger">
+                {{ trans('reserva_texto_pago_pasarela_denegado', {'email':'jcomercial@gcnacio.gca.tur.cu', 'link' : base_url('carro-compra')})|raw }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

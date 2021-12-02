@@ -1,0 +1,20 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container">
+	<div class="row" style="padding-top: 200px;">
+		<div class="col-sm-12">
+			<div class="alert alert-info">{{ trans('reserva_texto_pago_transferencia_bancaria')|raw }}</div>
+		</div>
+
+		<div class="col-sm-12">
+			<b>{{ trans('reserva_informacion_cuenta_bancaria' }}</b><br/>
+			{{ trans('banco_financiero_internacional') }} {{ banco }}<br/>
+			{{ trans('banco_nombre_cuenta') }} {{ titularcuenta }}<br/>
+			{{ trans('banco_numero_cuenta') }} {{ cuentabanco }}<br/>
+			{{ trans('banco_swift') }} {{ swift }}<br/>
+			{{ trans('banco_swift') }} {{ swift }}<br/>
+		</div>
+	</div>
+</div>
+{% endblock %}

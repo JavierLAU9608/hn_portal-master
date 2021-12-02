@@ -1,0 +1,92 @@
+{% set datos_adicionales = producto.options %}
+
+<div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-4">{{ trans('serivicio_nombre',{'nombre':trans('alojamiento')}) }}</div>
+                <div class="col-sm-4">{{ trans('fecha_solicitud') }}:<br/>{{  app_str_date(app_now()) }}</div>
+                <div class="col-sm-4">
+                    {{ trans('carro_estado_reserva') }}:<br/>
+                    {% if datos_adicionales.aconfirmar==1 %}
+                        {{ trans("reserva_a_confirmar") }}
+                    {% else %}
+                        {{ trans('reserva_estado_confirmada') }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+
+            <div class="precio_reserva right">
+                <p class="verdana text-price-box">{{ trans('precio') }}</p>
+                <p class="verdana yellow_lite text-price-box text-white">{{  app_rate_cambio(producto.price,'smb') }}</p>
+            </div>
+
+            <div id="hidden-{{  producto.id }}" class="verdana" style="display: none">
+                {{ trans('al_habitaciones') }} <br/>
+
+                <div class="left">
+                    <p class="verdana">{{ trans('al_cantidad_habitaciones') }}:<b>{{ datos_adicionales.habitaciones|length }}</b></p>
+                </div>
+
+                {% for h in datos_adicionales.habitaciones %}
+                    {% set tipo_habitacion = app_get_tipo_habitacion(h.tipo_habitacion) %}
+                    {% set tipo_habitacion_nombre = app_traduccion('hotel','hotel_tipo_hab_idioma','nombre','tipo_habitacion_fk',tipo_habitacion.id,tipo_habitacion.nombre_habitacion) %}
+                    {% set plan_alimentacion = app_get_plan_alimentacion(h.plan) %}
+                    {% set plan_nombre = app_traduccion('hotel','hotel_plan_idioma','nombre','plan_fk',plan_alimentacion.id,plan_alimentacion.nombre_plan) %}
+                    {% set nuevos_paxs = app_convert_paxs(app_get_pax_habitacion(tipo_habitacion.id, plan_alimentacion.id, h.fecha)) %}
+
+
+                    {{ trans('al_habitacion') }}: {{ tipo_habitacion_nombre }} <br/>
+                    {{ trans('al_fecha_entrada') }}: {{ app_str_date(h.fecha) }} <br/>
+
+                    {% set b2b = app.user.id_tipo_cliente ? true : false %}
+                    {% if b2b == true %}
+                        {{ trans('responsable_hab_nombre') }}: {{ h.responsable_nombre }}<br/>
+                        {{ trans('responsable_hab_pasaporte') }}: {{ h.responsable_pasaporte }}<br/>
+                    {% endif %}
+
+                    {{ trans('al_noches') }}: {{ h.noches }}<br/>
+
+                    {% if h.paquete_luna_miel|default %}
+                        {% set paquete_luna_miel = app_get_paquete_luna_miel(h.paquete_luna_miel) %}
+                        {% set paquete_luna_miel_nombre = app_traduccion('hotel','hotel_pack_idioma','nombre','pack_fk',paquete_luna_miel.id,paquete_luna_miel.nombre) %}
+
+                        {{ trans('al_paquete_luna_miel') }}: {{ paquete_luna_miel_nombre }}<br/>
+                    {% endif %}
+
+                    {{ trans('al_plan_alojamiento') }}: {{ plan_nombre }}<br/>
+                    {{ trans('al_pax') }}: {{ app_get_pax_opc(nuevos_paxs, h.paxs) }}<br/>
+                    {{ trans('al_hora_entrada') }}: {{ h.hora }}<br/>
+
+                    {% if h.ninno_adicional != 'f' and h.ninno_adicional|default %}
+                        {{ trans('al_ninno_adicional') }}
+                    {% endif %}
+                {% endfor %}
+
+                {% if datos_adicionales.detalles != '' %}
+                    {{ trans('detalles_adicionales') }}:<br/>
+                    <p class="verdana">{{ datos_adicionales.detalles }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <a id="tog-{{  producto.id }}" class="toggle btn btn-default circle" data-pick="{{ trans('recoger') }}" title="{{ trans('otros_detalles') }}">{{ trans('otros_detalles') }}</a>
+            {% if datos_adicionales.aconfirmar == 2 %}
+                <a href="{{ base_url('con_reservacion/cancelar_producto_confirmado_car/' ~ producto.rowid) }}" class="btn btn-default buttom roman right">{{ trans('cancelar') }}</a>
+            {% else %}
+                <a class="btn btn-default circle buttom roman right" href="{{ trans('ruta_carro_compra_cancelar',{'rowid':producto.rowid}) }}" >{{ trans('cancelar') }}</a>
+                <a class="btn btn-default circle buttom roman right margen_r" href="{{ trans('ruta_carro_compra_editar',{'rowid':producto.rowid}) }}">{{ trans('editar') }}</a>
+            {% endif %}
+        </div>
+
+        <div class="col-sm-12">
+            <hr/>
+        </div>
+    </div>
+</div>

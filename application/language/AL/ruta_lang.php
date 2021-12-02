@@ -1,0 +1,54 @@
+<?php
+//RUTA AL
+
+$lang['ruta_perfil'] = 'perfil';
+$lang['ruta_cancelar_boletin'] = 'cancelar-boletin';
+$lang['ruta_activar_cuenta'] = 'activar-cuenta/{codigo}';
+$lang['ruta_recuperar_contrasenna'] = 'recuperar-contrasenna';
+$lang['ruta_mi_cuenta'] = 'cuenta/perfil';
+$lang['ruta_historial'] = 'cuenta/historial';
+$lang['ruta_calendario_pagos'] = 'cuenta/calendario-pagos';
+$lang['ruta_pagar_calendario'] = 'cuenta/pagar/{producto}/{id}';
+$lang['ruta_voucher_producto'] = 'cuenta/voucher/{producto}/{id}';
+$lang['ruta_cancelar_producto_pagado'] = 'cuenta/cancelar-reserva/{producto}/{id}';
+$lang['ruta_informacion'] = 'informacion/{titulo}';
+$lang['ruta_restaurantes'] = 'restaurantes';
+$lang['ruta_restaurante'] = 'restaurante/{slug}';
+$lang['ruta_restaurante-menus'] = 'restaurante-menus/{slug}';
+$lang['ruta_reservar_restaurante'] = 'reserva-restaurante/{slug}';
+$lang['ruta_personalidades'] = 'personalidades';
+$lang['ruta_personalidad'] = 'personalidades/{slug}';
+$lang['ruta_noticias'] = 'noticias';
+$lang['ruta_noticia'] = 'noticias/{titulo}/{id}';
+$lang['ruta_historia'] = 'historia';
+$lang['ruta_galeria_imagenes'] = 'galeria-imagenes';
+$lang['ruta_galeria_imagenes_tipo'] = 'galeria-imagenes/{slug}';
+$lang['ruta_descargar_imagen'] = 'descargar-imagen/{id}';
+$lang['ruta_descargar_imagenes_por_tipo'] = 'descargar-imagenes/{id}';
+$lang['ruta_carro_compra'] = 'carro-compra';
+$lang['ruta_carro_compra_cancelar'] = 'carro-compra/cancelar/{rowid}';
+$lang['ruta_carro_compra_editar'] = 'carro-compra/editar/{rowid}';
+$lang['ruta_mapa_sitio'] = 'mapa-sitio';
+$lang['ruta_ofertas'] = 'ofertas';
+$lang['ruta_oferta'] = 'oferta/{nombre}/{id}';
+$lang['ruta_reservar_oferta'] = 'reserva-oferta/{id_oferta}';
+$lang['ruta_ofertas_tipo'] = 'ofertas/{slug}';
+$lang['ruta_datos_reserva'] = 'datos-reserva';
+$lang['ruta_bares'] = 'bares';
+$lang['ruta_bar'] = 'bares/{slug}';
+$lang['ruta_bar_menus'] = 'bares/{slug}/menus';
+$lang['ruta_reservar_bar'] = 'reserva-bar/{slug}';
+$lang['ruta_alojamientos'] = 'alojamiento';
+$lang['ruta_reservar_alojamiento'] = 'reserva-alojamiento';
+$lang['ruta_reservar_alojamiento_habitacion'] = 'reserva-alojamiento/{nombre}/{id}';
+$lang['ruta_ejecutivo'] = 'ejecutivo';
+$lang['ruta_historicas'] = 'historicas';
+$lang['ruta_paquetes_luna_miel'] = 'paquetes-luna-miel';
+$lang['ruta_eventos'] = 'eventos-convenciones';
+$lang['ruta_reservar_evento'] = 'reservar-evento';
+$lang['ruta_crear_reserva_eventos'] = 'detalles-reserva-eventos';
+$lang['ruta_eventos_cancelar'] = 'cancelar-evento';
+$lang['ruta_rss'] = 'rss/{codigo}';
+$lang['ruta_catalogo'] = 'catalogo';
+$lang['ruta_servicio_tipo'] = 'facilidad/{id}';
+?>

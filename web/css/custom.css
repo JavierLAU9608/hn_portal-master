@@ -1,0 +1,265 @@
+/* here you can put your own css to customize and override the theme */
+
+.header-social {
+    /*float: right;*/
+    list-style: none;
+    padding: 19px 0 0;
+    margin: 0;
+    /*font: 400 18px "Menu-Item", Arial, sans-serif;*/
+    font-family: "Menu-Item2";
+    font-size: 18px;
+    /*text-transform: uppercase;*/
+}
+
+.header-social li {
+    float: left;
+    padding: 0;
+    margin: 0 0 0 10px;
+}
+
+.header-navigation a:hover, .header-navigation li.current a {
+    color: #000;
+}
+
+.header-navigation a:hover, .header-navigation li.current a:active {
+    color: #000 !important;
+}
+
+.header .header-navigation{
+    padding-top: 10px;
+}
+
+.btn-language {
+    padding: 7px 14px;
+    font-size: 14px;
+    /*text-transform: none;*/
+    border-radius: 0;
+    background-color: #fff;
+    border: 0px;
+}
+
+
+.btn-default {
+    color: #E1B317;
+    background-color: #fff;
+    border-color: #E1B317;
+}
+
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
+    color: #fff;
+    background-color: #E1B317;
+    border-color: #E1B317;
+    box-shadow: 0 1px 4px rgba(228, 228, 228, 0.95);
+}
+
+.btn-default-booking {
+    color: #fff;
+    background-color: #E1B317;
+    border: 1px solid #fff !important;
+    font-family: Menu-Item2;
+    font-size: 18px;
+    padding: 10px 30px 10px 30px;
+    margin-left: 30px;
+}
+
+.btn-default-booking:hover, .btn-default-booking:focus, .btn-default-booking:active, .btn-default-booking.active {
+    color: #E1B317;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    /*box-shadow: 0 1px 4px rgba(228, 228, 228, 0.95);*/
+}
+
+.btn-default-booking-pay {
+    color: #fff;
+    background-color: #002A5C;
+    border: 1px solid #fff !important;
+    font-size: 14px;
+    padding: 5px 20px 5px 20px;
+}
+
+.btn-default-booking-pay:hover, .btn-default-booking-pay:focus, .btn-default-booking-pay:active, .btn-default-booking-pay.active {
+    color: #E1B317;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    /*box-shadow: 0 1px 4px rgba(228, 228, 228, 0.95);*/
+}
+
+.btn-default-booking-hab {
+    color: #E1B317;
+    background-color: #fff;
+    border: 1px solid #E1B317 !important;
+    font-family: Menu-Item2;
+    border-color: #E1B317;
+    font-size: 18px;
+    padding: 5px 20px 5px 20px;
+}
+
+.btn-default-booking-hab:hover, .btn-default-booking-hab:focus, .btn-default-booking-hab:active, .btn-default-booking-hab.active {
+    color: #fff;
+    background-color: #E1B317;
+    border-color: #E1B317;
+    box-shadow: 0 1px 4px rgba(228, 228, 228, 0.95);
+}
+
+.btn-default-booking-box {
+    color: #E1B317;
+    background-color: #fff;
+    border: 1px solid #E1B317 !important;
+    font-family: Menu-Item2;
+    border-color: #E1B317;
+    font-size: 16px;
+    padding: 5px 15px 5px 15px;
+}
+
+.btn-default-booking-box:hover, .btn-default-booking-box:focus, .btn-default-booking-box:active, .btn-default-booking-box.active {
+    color: #fff;
+    background-color: #E1B317;
+    border-color: #E1B317;
+    box-shadow: 0 1px 4px rgba(228, 228, 228, 0.95);
+}
+
+.text-price{
+    font-family: "Menu-Item2";
+    font-size: 36px;
+}
+
+.text-price-hab{
+    font-family: "Menu-Item2";
+    font-size: 26px;
+}
+
+.text-price-box{
+    font-family: "Menu-Item2";
+    font-size: 16px;
+}
+
+.text-white{
+    color: #ffffff;
+}
+
+.text-black{
+    color: #000000;
+}
+
+.text-border-bottom{
+    border-bottom: #D19F00 solid 10px;
+}
+
+.text-border-top{
+    border-top: #D19F00 solid 10px;
+    width: 70px;
+    display: block;
+}
+
+
+.text-content{
+    position: relative;
+    margin: 0 auto;
+    width: 50%;
+}
+
+.columns-2-text-simple {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+    -moz-column-rule: 1px solid #fff;
+    min-height: 213px;
+    column-count: 2;
+}
+
+.border-hab{
+    border: 1px solid #D19F00;
+}
+
+.line-hab-booking{
+    background-color: transparent;border-color: #c4990c;border-style: solid; border-width: 1px 0 0;height: 7px;
+}
+
+.bg-white{
+    background-color: #ffffff;
+}
+
+.pre-footer .top-line {
+    border-top: solid 0px #535353;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.tripadvisor-img{
+    background: #3d3d3d url(../img/tripadvisor-01.svg) top left no-repeat;
+    width: 45px;
+    height: 45px;
+}
+
+.bv-box{
+    border: 1px solid #ccc; width: 49% !important; margin-right: 1%;
+}
+
+.r-box{
+    margin-left: 10px;
+}
+
+.form-group{
+    margin-left: 20px;
+}
+
+label{
+    color: #000000;
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 14px;
+}
+
+.label-white{
+    color: #FFFFFF;
+}
+
+.control-label{
+    color: #000000;
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-size: 14px;
+}
+
+.bg-form{
+    background-color: #c4990c;
+}
+
+.modal-title{
+    font-family: "Menu-Item2";
+    font-size: 26px;
+}
+
+.modal-footer{
+    background-color: #c4990c;
+}
+
+.cart-content{
+    float: right; position: relative; margin-right: 20px;
+}
+
+.sticker {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 99px;
+    height: 150px;
+}
+.sticker-sale-es {
+    background: url(../img/sale-es.png) no-repeat;
+}
+.sticker-sale-en {
+    background: url(../img/sale-en.png) no-repeat;
+}
+
+.ui-datepicker a, .ui-datepicker a:hover {
+    color: #000000;
+}
+
+.input-small {
+    width: 165px !important;
+}
+
+.columns-text-simple {
+    -moz-column-count:4;
+    -moz-column-gap:20px;
+    -webkit-column-count: 4;
+    column-count: 4;
+}

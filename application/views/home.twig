@@ -1,0 +1,613 @@
+{% extends 'base.twig' %}
+
+{% block slider_js %}
+    <!-- BEGIN RevolutionSlider -->
+    <script src="web/js/jquery.themepunch.revolution.min.js" type="text/javascript"></script>
+    <script src="web/js/jquery.themepunch.tools.min.js" type="text/javascript"></script>
+    <script src="web/js/revo-ini.js" type="text/javascript"></script>
+    <!-- END RevolutionSlider -->
+{% endblock %}
+
+{% block js_homepage %}
+    <script src="web/js/jquery.easing.js"></script>
+    <script src="web/js/jquery.parallax.js"></script>
+    <script src="web/js/jquery.nav.js"></script>
+    <script src="web/assets/jquery_lazyload-2.x/lazyload.min.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block pixel %}
+    <meta name="msvalidate.01" content="7B5B67DF1BBDED5D81554335C6B7B366" />
+{% endblock %}
+
+{% block stylesheet %}
+    {#<link href="web/assets/jquery-ui/jquery.ui.all.css-min.css" rel="stylesheet">#}
+
+    <link href="web/assets/bootstrap-datepicker/css/datepicker.css" rel="stylesheet">
+    <link href="web/assets/bootstrap-datepicker/css/datepicker3.css" rel="stylesheet">
+{% endblock %}
+
+{% block barra_reserva %}
+    <!-- Header BEGIN -->
+    <div class="header header-mobi-ext">
+        <div class="container">
+            <div class="row">
+                <!-- Logo BEGIN -->
+                <div class="col-md-3 col-sm-3 col-xs-6 padding-top-10">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <span class="text-white text-uppercase">{{ trans('precio_desde') }}:</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-border-bottom" style="width: auto !important;">
+                            <span id="default_room_precio" class="text-black text-price">{{ default_room.precio }}</span>
+                            <span class="text-white text-price text-uppercase"> / {{ trans('noche') }}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Logo END -->
+                <a href="javascript:void(0);" class="mobi-toggler"><i class="fa fa-search"></i></a>
+                <!-- Navigation BEGIN -->
+                <div class="col-md-9 pull-right header-navigation">
+
+                        {{ form_open('reserva-alojamiento',{'class':'form-inline'}) }}
+                        <div class="form-group">
+                            <label for="nombre_habitacion" class="hidden-xs label-white">{{ trans('al_habitacion') }}</label>
+                            <div class="input-icon">
+                                <i class="fa fa-bed"></i>
+                                <select required="required" id="nombre_habitacion" name="tipo_habitacion" class="form-control input-small">
+                                        {% for al in lista_alojamientos %}
+                                            <option data-precio="{{ al.precio }}" {{ default_room.tipo_habitacion_fk == al.tipo_habitacion_fk ? 'selected="selected"'}} value="{{ al.tipo_habitacion_fk }}">
+                                                {{ al.nombre_trad_ ?? al.tipo.nombre_habitacion }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date_in_room" class="hidden-xs label-white">{{ trans('al_fecha_entrada') }}</label>
+                            <div class="input-icon" id="datepicker_container">
+                                <i class="fa fa-calendar"></i>
+                                <input required="required" autocomplete="off" id="date_in_room" type="text" name="fecha" class="form-control input-small">
+                                </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="booking_noches" class="hidden-xs label-white">{{ trans('al_noches') }}</label>
+                            <div class="input-icon">
+                                <i class="fa fa-moon-o"></i>
+                                <select required="required" id="booking_noches" name="noches" class="form-control">
+                                    <option value="1">1</option>
+                                </select>
+                                </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="no_habitacion" class="hidden-xs label-white">{{ trans('al_cantidad_habitaciones_abreviado') }}</label>
+                            <div class="input-icon">
+                                <i class="fa fa-home"></i>
+                                <select required="required" id="no_habitacion" name="cantidad_habitaciones" class="form-control">
+                                    <option value="1">1</option>
+                                </select>
+                                </div>
+                            </div>
+
+
+                            <input class="btn circle btn-default-booking margin-top-20" type="submit" value="{{ trans('reservar') }}">
+
+
+                        <img src="web/img/free-wifi.png" alt="Free Wifi" title="Free Wifi" class="img-responsive" style="position: relative; float: right;" />
+                        </form>
+
+
+
+                    </div>
+                </div>
+                <!-- Navigation END -->
+            </div>
+        </div>
+    </div>
+    <!-- Header END -->
+{% endblock barra_reserva %}
+
+{% block slide_show %}
+    <!-- Promo block BEGIN -->
+    <div class="promo-block" id="promo-block">
+        <div class="tp-banner-container">
+            <div class="tp-banner" >
+                <ul>
+                    {% for ss in slide_show %}
+                        <li data-transition="fade" data-slotamount="5" data-masterspeed="700" data-delay="9400" class="slider-item-1">
+                            <img src="{{ app_url_admin()~'/admin/slideshow/slide-'~ss.url_imagen }}" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat" class="fade">
+                            <div class="caption lft start"
+                                 data-y="top"
+                                 data-voffset="110"
+                                 data-x="right"
+                                 data-hoffset="0"
+                                 data-speed="600"
+                                 data-start="500"
+                                 data-easing="easeOutBack"><img src="web/img/world-travel-award.png" alt="">
+                            </div>
+
+                            {% if app.current_lang.codigo|lower == 'es' %}
+                                <div class="caption lft start"
+                                     data-y="top"
+                                     data-voffset="100"
+                                     data-x="left"
+                                     data-hoffset="0"
+                                     data-speed="600"
+                                     data-start="500"
+                                     data-easing="easeOutBack"><img src="web/img/logo/exe_es.png" alt="">
+                                </div>
+                            {% else %}
+                                <div class="caption lft start"
+                                     data-y="top"
+                                     data-voffset="100"
+                                     data-x="left"
+                                     data-hoffset="0"
+                                     data-speed="600"
+                                     data-start="500"
+                                     data-easing="easeOutBack"><img src="web/img/logo/exe_en.png" alt="">
+                                </div>
+                            {% endif %}
+
+
+                            <div class="tp-caption large_text fade {{ loop.firts ? 'customin customout start' }}"
+                                 data-x="left"
+                                 data-hoffset="0"
+                                 data-y="bottom"
+                                 data-voffset="-20"
+                                 data-customin="x:0;y:0;z:0;rotationX:90;rotationY:0;rotationZ:0;scaleX:1;scaleY:1;skewX:0;skewY:0;opacity:0;transformPerspective:200;transformOrigin:50% 0%;"
+                                 data-customout="x:0;y:0;z:0;rotationX:0;rotationY:0;rotationZ:0;scaleX:0.75;scaleY:0.75;skewX:0;skewY:0;opacity:0;transformPerspective:600;transformOrigin:50% 50%;"
+                                 data-speed="1000"
+                                 data-start="500"
+                                 data-easing="Back.easeInOut"
+                                 data-endspeed="300">
+
+                                <div class="promo-like-text">
+                                    <h2>
+                                        {% if ss.link|default(false) %}
+                                            <a href="{{ ss.link }}">{{ (ss.titulo_trad ?? ss.titulo) | raw }}</a>
+                                        {% else %}
+                                            {{ (ss.titulo_trad ?? ss.titulo) | raw }}
+                                        {% endif %}
+                                    </h2>
+                                    <p>
+                                        {% if ss.link|default(false) %}
+                                            <a href="{{ ss.link }}">{{ (ss.descripcion_trad ?? ss.descripcion) | raw }}</a>
+                                        {% else %}
+                                            {{ (ss.descripcion_trad ?? ss.descripcion) | raw }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Promo block END -->
+{% endblock slide_show %}
+
+{% block content %}
+    <!-- About block BEGIN -->
+    <div class="about-block content content-center" id="about">
+        <div class="container">
+            <h1>{{ trans('hotel_nacional_cuba') }}</h1>
+
+            <div class="padding-bottom-40 text-content" style="font-size: 16px;">
+                {{ (texto_presentacion.value_trad ?? texto_presentacion.value) | raw }}
+            </div>
+
+            <h2>{{ trans('alojamiento') }}</h2>
+            {% for al in lista_alojamientos if al.precio_numerico > 0 %}
+                <div class="row border-hab margin-bottom-30">
+                    <div class="col-md-6 padding-left-0">
+                        <a class="fancybox" href="{{ app_url_admin()~ '/hoteles/habitaciones/zoom-'~al.imagen }}">
+                            <img src="web/img/hab-thumb.jpg" data-src="{{ app_url_admin()~ '/hoteles/habitaciones/hab-thumb-'~al.imagen }}" class="img-responsive lazyload"/>
+                        </a>
+                        {% if al.precio_oferta %}
+                        <div class="sticker sticker-sale-{{ app.current_lang.codigo|lower }}"></div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 text-left">
+                        <div style="border-top: #D19F00 solid 10px; width: 70px;"></div>
+                        {% set nombre_alojamiento = al.nombre_trad_ ?? al.tipo.nombre_habitacion %}
+                        {% set descripcio_alojamiento = app_traduccion('hotel','hotel_habitacion_hotel_idioma','nombre','habitacion_hotel_fk', al.id_ocupacion,al.presentacion) %}
+                        <h3 class="padding-top-20">{{ nombre_alojamiento }}</h3>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{ descripcio_alojamiento|raw }}
+                            </div>
+                        </div>
+                        <div class="row columns-2-text-simple padding-top-20 padding-bottom-20" style="">
+                            <div class="col-md-12">
+                                <ul>
+                                    <li> {{ trans('al_cant_personas') }}: {{ al.cantidad_pax }}</li>
+                                    <li>{{ trans('al_cant_camas') }}: {{ al.cantidad_camas }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row padding-left-15">
+                            <div class="{{ al.precio_oferta ? 'col-md-5' : 'col-md-3'}} col-xs-6 text-border-bottom">
+                                <span class="text-black text-price-hab">
+                                    {{ al.precio }}
+                                    {% if al.precio_oferta %}
+                                        <s style="color: #CCCCCC; font-size: 20px;">{{ al.precio_original }}</s>
+                                    {% endif %}
+
+                                </span>
+                            </div>
+                            <div class="{{ al.precio_oferta ? 'col-md-1' : 'col-md-3'}} margin-top-20 line-hab-booking hidden-xs hidden-sm"></div>
+                            <div class="col-md-3 col-xs-6 text-center">
+                                <a class="btn circle btn-default-booking-hab"
+                                   href="{{ trans('ruta_reservar_alojamiento_habitacion',{'nombre':url_title(nombre_alojamiento),'id':al.tipo_habitacion_fk}) }}">{{ trans('reservar') }}</a>
+                            </div>
+                            <div class="col-md-3 margin-top-20 line-hab-booking hidden-xs"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {# SEO #}
+                <div itemscope itemtype="schema.org/Product" style="display: none">
+                    <span itemprop="name">{{ nombre_alojamiento }}</span>
+                    <span itemprop="image">{{ app_url_admin()~ '/hoteles/habitaciones/zoom-'~al.imagen }}</span>
+                    <span itemprop="priceRange">{{ al.precio }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- About block END -->
+
+
+    <!-- Message block BEGIN -->
+    <div class="message-block content content-center valign-center margin-top-20 padding-top-60" id="message-block">
+        <h2>{{ trans('of_parisiem') }}</h2>
+
+        <div class="container margin-top-160">
+            <div class="row">
+                {% for o in lista_parisiem %}
+                    {% set o_t_descripcion = o.descripcion_trad ?? o.descripcion %}
+                    {% set o_t_nombre = o.nombre_trad ?? o.nombre %}
+
+                    <div class="col-md-4 col-xs-12 col-sm-12 message-block-box padding-top-10 text-left">
+                        <h4 style="min-height: 44px">
+                            <a class="fancybox fancybox.ajax" href="{{ trans('ruta_oferta',{'nombre':url_title(o_t_nombre),'id':o.id}) }}">{{ o_t_nombre }}</a>
+                        </h4>
+                        <div class="row" style="min-height: 66px">
+                            <div class="col-md-12 col-xs-12 col-sm-12">
+                                {#<p>{{ o_t.descripcion|striptags }}</p>#}
+                                <p>{{ word_limiter(app_strip_etiquetas(o_t_descripcion),15)|raw }}</p>
+                            </div>
+                        </div>
+                        <div class="row padding-left-15 padding-right-0 padding-bottom-xs">
+                            <div class="col-md-4 col-xs-6 text-border-bottom padding-top-10">
+                                <span class="text-black text-price-box">{{ app_rate_cambio(o.precio,'smb') }}</span>
+                            </div>
+                            <div class="col-md-4 col-xs-6  text-center">
+                                <a class="btn circle btn-default-booking-box" href="{{ base_url(trans('ruta_reservar_oferta',{'id_oferta':o.id})) }}">{{ trans('of_reservar') }}</a>
+                            </div>
+                            <div class="col-md-4 margin-top-20 line-hab-booking hidden-xs"></div>
+                        </div>
+                    </div>
+
+                    {# SEO #}
+                    <div itemscope itemtype="schema.org/Product" style="display: none">
+                        <span itemprop="name">{{ o_t_nombre }}</span>
+                        <span itemprop="image">{{ app_url_admin()~ '/oferta/oferta-'~o.imagen }}</span>
+                        <span itemprop="priceRange">{{ app_rate_cambio(o.precio,'smb') }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    <!-- Message block END -->
+
+    <!-- Team block BEGIN -->
+    <div class="team-block content content-center margin-bottom-40" id="team">
+        <div class="container">
+            <h2>{{ trans('buena_vista') }}</h2>
+
+            <div class="row margin-bottom-10 margin-top-20">
+                <div class="col-md-12">
+                    <img data-src="web/img/concierto.jpg" alt="" class="img-responsive lazyload"/>
+                </div>
+            </div>
+            <div class="row">
+                {% for o in lista_buena_vista %}
+                    {% set o_t_descripcion = o.descripcion_trad ?? o.descripcion %}
+                    {% set o_t_nombre = o.nombre_trad ?? o.nombre %}
+                    <div class="col-md-6 col-xs-12 padding-top-20 text-left bv-box" style="">
+                        <h4>
+                            <a class="fancybox fancybox.ajax" href="{{ trans('ruta_oferta',{'nombre':url_title(o_t_nombre),'id':o.id}) }}">{{ o_t_nombre }}</a>
+                        </h4>
+                        <div class="row" style="min-height: 95px">
+                            <div class="col-md-12">
+                                {#<p>{{ o_t.descripcion|striptags }}</p>#}
+                                <p>{{ word_limiter(app_strip_etiquetas(o_t_descripcion),15)|raw }}</p>
+                            </div>
+                        </div>
+                        <div class="row padding-left-15 padding-right-0">
+                            <div class="col-md-3 col-xs-6 text-border-bottom padding-top-10">
+                                <span class="text-black text-price-box">{{ app_rate_cambio(o.precio,'smb') }}</span>
+                            </div>
+                            <div class="col-md-4 col-xs-6 text-center">
+                                <a class="btn circle btn-default-booking-box" href="{{ base_url(trans('ruta_reservar_oferta',{'id_oferta':o.id})) }}">{{ trans('of_reservar') }}</a>
+                            </div>
+                            <div class="col-md-5 margin-top-20 line-hab-booking hidden-xs"></div>
+                        </div>
+                    </div>
+
+                    {# SEO #}
+                    <div itemscope itemtype="schema.org/Product" style="display: none">
+                        <span itemprop="name">{{ o_t_nombre }}</span>
+                        <span itemprop="image">{{ app_url_admin()~ '/oferta/oferta-'~o.imagen }}</span>
+                        <span itemprop="priceRange">{{ app_rate_cambio(o.precio,'smb') }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+    </div>
+    <!-- Team block END -->
+
+    <!-- Facts block BEGIN -->
+    <div class="facts-block content content-center padding-bottom-40" id="benefits">
+        <h2>{{ trans('of_ofertas_especiales') }}</h2>
+
+        <div class="container">
+            <div class="row">
+                {% for o in lista_ofertas_especiales %}
+                    {% set o_t_descripcion = o.descripcion_trad ?? o.descripcion %}
+                    {% set o_t_nombre = o.nombre_trad ?? o.nombre %}
+                    <div class="col-md-4 col-sm-4 col-xs-12 padding-bottom-20">
+                        <h4>
+                            <a class="fancybox fancybox.ajax" href="{{ trans('ruta_oferta',{'nombre':url_title(o_t_nombre),'id':o.id}) }}">{{ o_t_nombre }}</a>
+                        </h4>
+                        {#<p>{{ o_t.descripcion|striptags }}</p>#}
+                        <p>
+                            {{ word_limiter(app_strip_etiquetas(o_t_descripcion),15)|raw }}
+                        </p>
+                        <span class="text-white text-price-box">{{ app_rate_cambio(o.precio,'smb') }}</span>
+                        <a class="btn circle btn-default-booking-box" href="{{ base_url(trans('ruta_reservar_oferta',{'id_oferta':o.id})) }}">{{ trans('of_reservar') }}</a>
+                    </div>
+
+                    {# SEO #}
+                    <div itemscope itemtype="schema.org/Product" style="display: none">
+                        <span itemprop="name">{{ o_t_nombre }}</span>
+                        <span itemprop="image">{{ app_url_admin()~ '/oferta/oferta-'~o.imagen }}</span>
+                        <span itemprop="priceRange">{{ app_rate_cambio(o.precio,'smb') }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Facts block END -->
+
+    <!-- Portfolio block BEGIN -->
+    <div class="portfolio-block content content-center margin-bottom-60" id="portfolio">
+        <div class="container">
+            <h2 class="margin-bottom-10">{{ texto_evento.titulo_trad ?? texto_evento.titulo }}</h2>
+
+            <div class="padding-bottom-40 text-content">{{ (texto_evento.value_trad ?? texto_evento.value)|raw }}</div>
+            <div class="row margin-top-20" style="border-top: 1px solid #cccccc">
+                <div class="col-md-3 text-left padding-top-20 hidden-xs">
+                    <h3>{{ trans('ev_facilidades') }}</h3>
+                    {% for tipo_evento in evento_tipos %}
+                        {% set nombre_trans = app_traduccion('evento','evento_tipos_idioma',NULL,'tipo_servicio_fk',tipo_evento.id,tipo_evento) %}
+                        {% if tipo_evento.archivo != '' %}
+                            <a target="_blank" class="btn btn-lg dark" href="{{ app.url_admin ~ '/eventos/' ~ tipo_evento.archivo }}" >
+                                <i class="fa fa-file-pdf-o"></i>
+                            </a>
+                            <a class="btn btn-lg dark fancybox fancybox.ajax" href="{{ base_url(trans('ruta_servicio_tipo',{"id" :tipo_evento.id })) }}" >
+                                {{ nombre_trans.nombre }}
+                            </a>
+                            <br/>
+                        {% else %}
+                            <a class="btn btn-lg dark fancybox fancybox.ajax" href="{{ base_url(trans('ruta_servicio_tipo',{"id" :tipo_evento.id })) }}" >
+                                {{ nombre_trans.nombre }}
+                            </a> <br/>
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+                <div class="col-md-6 text-left padding-top-20">
+                    {{ (textoeventocontacto.value_trad ?? textoeventocontacto.value)|raw }}
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+            <div class="row margin-top-20 hidden-xs">
+                <div class="col-md-3 padding-left-0">
+                    <div class="row">
+                        {% set img_main = app_url_admin()~ '/eventos/evento-hotel.jpg' %}
+                        {% for img in evento_imagenes %}
+                            {% if img.principal == 't' %}
+                                {% set img_main = app_url_admin()~ '/hoteles/78/images/zoom-' ~ img.url %}
+                            {% endif %}
+                            <div class="col-xs-4 padding-right-5 margin-bottom-5">
+                                <a class="change-img-evento" data-source="{{ app_url_admin()~ '/hoteles/78/images/zoom-' ~ img.url }}">
+                                    <img data-src="{{ app_url_admin()~ '/hoteles/78/images/ev-thumb-' ~ img.url }}" alt="{{ img.descripcion }}" class="lazyload"/>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-9" id="img_evento_container">
+                    {% if img_main != '' %}
+                        <img id="img_main_evento" data-src="{{ img_main  }}" class="img-responsive lazyload"/>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Portfolio block END -->
+
+
+{#    <!-- Team block BEGIN -->#}
+{#    <div class="team-block content content-center margin-bottom-40" id="portfolio">#}
+{#        <div class="container">#}
+{#            <h2>{{ trans('bodas_quince') }}</h2>#}
+
+{#            <div class="row margin-bottom-10 margin-top-20">#}
+{#                <div class="col-md-12">#}
+{#                    {{ texto_boda.value_trad|default(texto_boda.value) }}#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="row">#}
+{#                {% for o in lista_bodas %}#}
+{#                    {% set o_t_descripcion = o.descripcion_trad ?? o.descripcion %}#}
+{#                    {% set o_t_nombre = o.nombre_trad ?? o.nombre %}#}
+{#                    <div class="col-md-6 col-xs-12 padding-top-20 text-left bv-box" style="">#}
+{#                        <img src="{{ app_url_admin()~ '/oferta/oferta-'~o.imagen }}" class="img-responsive">#}
+{#                        <h4>#}
+{#                            <a class="fancybox fancybox.ajax" href="{{ trans('ruta_oferta',{'nombre':url_title(o_t_nombre),'id':o.id}) }}">{{ o_t_nombre }}</a>#}
+{#                        </h4>#}
+{#                        <div class="row" style="min-height: 95px">#}
+{#                            <div class="col-md-12">#}
+{#                                #}{#<p>{{ o_t.descripcion|striptags }}</p>#}
+{#                                <p>{{ word_limiter(app_strip_etiquetas(o_t_descripcion),15)|raw }}</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="row padding-left-15 padding-right-0">#}
+{#                            <div class="col-md-3 col-xs-6 text-border-bottom padding-top-10">#}
+{#                                <span class="text-black text-price-box">{{ app_rate_cambio(o.precio,'smb') }}</span>#}
+{#                            </div>#}
+{#                            <div class="col-md-4 col-xs-6 text-center">#}
+{#                                <a class="btn circle btn-default-booking-box" href="{{ base_url(trans('ruta_reservar_oferta',{'id_oferta':o.id})) }}">{{ trans('of_reservar') }}</a>#}
+{#                            </div>#}
+{#                            <div class="col-md-5 margin-top-20 line-hab-booking hidden-xs"></div>#}
+{#                        </div>#}
+{#                    </div>#}
+
+{#                    #}{# SEO #}
+{#                    <div itemscope itemtype="schema.org/Product" style="display: none">#}
+{#                        <span itemprop="name">{{ o_t_nombre }}</span>#}
+{#                        <span itemprop="image">{{ app_url_admin()~ '/oferta/oferta-'~o.imagen }}</span>#}
+{#                        <span itemprop="priceRange">{{ app_rate_cambio(o.precio,'smb') }}</span>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+
+
+{#        </div>#}
+{#    </div>#}
+{#    <!-- Team block END -->#}
+
+
+    <!-- Restaurante BEGIN -->
+    <div class="prices-block content content-center" id="prices">
+        <div class="container">
+            <h2 class="margin-bottom-20">
+                {{ (textopresentacion_restaurante.titulo_trad ?? textopresentacion_restaurante.titulo)|raw }}
+            </h2>
+
+            <div class="padding-bottom-40 text-content">
+                {{ (textopresentacion_restaurante.value_trad ?? textopresentacion_restaurante.value)|raw }}
+            </div>
+            <div class="row">
+                <div class="col-md-3 text-center" >
+                    <h3 class="uppercase margin-bottom-20">{{ trans('of_ofertas_especiales') }}</h3>
+
+                    <div class="row">
+                        {% for o in lista_ofertas_restaurantes %}
+                            {% set o_t_descripcion = o.descripcion_trad ?? o.descripcion %}
+                            {% set o_t_nombre = o.nombre_trad ?? o.nombre %}
+
+                            <div class="col-md-12 margin-bottom-60">
+                                <h4><a class="fancybox fancybox.ajax" href="{{ trans('ruta_oferta',{'nombre':url_title(o_t_nombre),'id':o.id}) }}">{{ o_t_nombre }}</a></h4>
+                                {#<p>{{ o_t.descripcion|striptags }}</p>#}
+                                <p>{{ word_limiter(app_strip_etiquetas(o_t_descripcion),15)|raw }}</p>
+                                <span class="text-price-hab" style="border-bottom: #d19f00 solid 10px;">{{ app_rate_cambio(o.precio,'smb') }}</span>
+
+                                <a class="btn circle btn-default-booking-box" href="{{ base_url(trans('ruta_reservar_oferta',{'id_oferta':o.id})) }}">{{ trans('of_reservar') }}</a>
+
+                            </div>
+
+                            {# SEO #}
+                            <div itemscope itemtype="schema.org/Product" style="display: none">
+                                <span itemprop="name">{{ o_t_nombre }}</span>
+                                <span itemprop="image">{{ app_url_admin()~ '/oferta/oferta-'~o.imagen }}</span>
+                                <span itemprop="priceRange">{{ app_rate_cambio(o.precio,'smb') }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+                <div class="col-md-9 text-left padding-left-20 hidden-xs" style="border-left: 1px solid #cccccc;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ (textocontacto_restaurante.value_trad ?? textocontacto_restaurante.value)|raw }}
+                        </div>
+                    </div>
+
+                    {% for r in lista_restaurantes %}
+                        {% set nombre_restaurante = r.nombre_trad ?? r.nombre %}
+                        {% set desc_restaurante = r.descripcion_trad ?? r.descripcion %}
+                        {% set slug_restaurante = r.slug %}
+                        {% set url_restaurante = app_parse(trans('ruta_restaurante'), {'slug': slug_restaurante}) %}
+
+                        <div class="row r-box margin-top-20 bg-white">
+                            <div class="col-md-5 padding-left-0 ">
+                                <a class="fancybox" href="{{ app_url_admin() ~ '/restaurante/zoom-'~ r.imagen }}">
+                                    <img data-src="{{ app_url_admin() ~ '/restaurante/rest-thumb-'~ r.imagen }}" class="img-responsive lazyload"/>
+                                </a>
+
+                            </div>
+                            <div class="col-md-7 padding-top-20 padding-bottom-20">
+                                <h3>{{ nombre_restaurante }}</h3>
+
+                                <p>{{ word_limiter(app_strip_etiquetas(desc_restaurante),30)|raw }}</p>
+                                <a href="{{ base_url(trans('ruta_restaurante-menus',{"slug" :r.slug })) }}" class="btn circle btn-default-booking-hab uppercase fancybox fancybox.ajax">
+                                    {{ trans('rt_ver_menu') }}
+                                </a>
+                            </div>
+
+                            {# SEO #}
+                            <div itemscope itemtype="schema.org/Restaurant" style="display: none">
+                                <span itemprop="name">{{ nombre_restaurante }}</span>
+                                <span itemprop="image">{{ app_url_admin() ~ '/restaurante/rest-thumb-'~ r.imagen }}</span>
+                                <span itemprop="address">{{ app.direccion.value }}</span>
+                                <span itemprop="servesCuisine">{{ r.tipo_comida_trad ?? r.tipo_comida }}</span>
+                                <span itemprop="telephone">{{ app.telefono.value }}</span>
+                                <span itemprop="priceRange">{{ r.precio ~ ' - ' ~ r.precio_mayor }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Prices block END -->
+{% endblock content %}
+
+{% block script %}
+    <script src="web/assets/bootstrap-datepicker/js/bootstrap-datepicker-homepage.js"></script>
+
+    {% if app.current_lang.codigo|lower != 'en' %}
+        <script src="web/assets/bootstrap-datepicker/js/locales/bootstrap-datepicker.{{ app.current_lang.codigo|lower }}.js"></script>
+    {% endif %}
+
+    <script>
+
+        $(document).ready(function () {
+            {% set paros_t = room_info.paros|default(false) %}
+            var config = {closedDates: {{ paros_t ? paros_t|raw : '[]' }}};
+            
+            config.dateOptions = {
+                language: '{{ app.current_lang.codigo|lower }}',
+                startDate: '{{ room_info.min_active_day }}',
+                endDate: '{{ room_info.fechaMax }}'
+            };
+
+            Nacional.initHomePage(config);
+            $("img.lazyload").lazyload();
+        });
+    </script>
+
+{% endblock %}

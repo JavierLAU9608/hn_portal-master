@@ -1,0 +1,42 @@
+
+<div style=" background-color: #f6f6f6; padding: 0; font-family:'Trebuchet MS'; font-size: 12px;margin: 0 auto; width: 650px;">
+        <div style="position: relative; float: left; width: 650px; border: #e0e0e0 1px solid; background-color: #ffffff;">
+            <div style="width: 630px; height: auto; margin-left: 10px;">
+              <div class="encabezado">
+               <img style="border-right:#C7CAD1 3px; float:left;" src="{{ base_url('/web/img/logo_email.jpg') }}" title="{{ trans('email_logo_text') }}" alt="{{ trans('email_logo_text') }}" />
+               <img style="border-right:#C7CAD1 3px; float:right;" src="{{ base_url('/web/img/logo_GranCaribe.jpg') }}" title="{{ trans("email_logo_text") }}" alt="{{ trans("email_logo_text") }}" />
+<!--               <span style="color:#457FBD; font-size:20px;font-weight:bold;padding-top:100px;">{asunto}.</span>-->
+              </div>
+              <div style="clear:both" class="principal">
+              <br/>
+              <br/>
+              <p style="line-height: 16px; padding: 0; margin: 0;">{{ trans('mail_cambio') }}</p><br/>
+               <hr/>
+              </div>
+              <div style="border-top:#9B9B9B 20px !important;">                
+                <p style="line-height: 16px; padding: 0; margin: 0;">
+                <br/>
+                    {% for r in reserva %}
+                        <b>{{ r.no_reserva }}</b> - {{ r.nombre_habitacion }} <br/>
+                        {{ trans('responsable_hab_nombre') }}: <b>{{ r.responsable_nombre }}</b> <br/>
+                        {{ trans('responsable_hab_pasaporte') }}: <b>{{ r.responsable_pasaporte }}</b> <br/><br/>
+                    {% endfor %}
+                <br/>
+                </p>
+              </div>
+
+              <br/>
+                <br/>
+                <hr/>
+                Hotel Nacional de Cuba <br/> {{ direccion_empresa }} <br/>
+
+                {{ trans('mail_email') }} <a href="mailto:jcomercial@gcnacio.gca.tur.cu">jcomercial@gcnacio.gca.tur.cu</a> <br/>
+
+                <br/><br/>
+                <p style="line-height: 16px; padding: 0; margin: 0;font-size: 10px;">
+                    {{ trans('mail_add') }}
+                </p>
+                <br/>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,169 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container">
+    <div class="row" style="padding-top: 200px;">
+
+        <div class="col-sm-3">
+            {{ menu_vertical({'items': items, 'item_activo': item_activo}) }}
+            <div class="clean_space"></div>
+        </div>
+
+        <div class="col-sm-9">
+            <ul class="nav nav-tabs">
+                <li class="{{ app.isPost ? '' : 'active' }}">
+                    <a href="#tab_info" data-toggle="tab">{{ titulo_activo }}</a>
+                </li>
+                <li class="{{ app.isPost ? 'active' : '' }}">
+                    <a href="#tab_edit" data-toggle="tab">{{ trans('user_datos_editar') }}</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="tab_info" class="tab-pane {{ app.isPost ? '' : 'active' }}">
+
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ trans('nombre_completo') }}</label>
+                            <div class="col-sm-10">
+                                <input readonly class="form-control" type="text" name="nombre" value="{{ user_registrado.nombre }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ trans('correo') }}</label>
+                            <div class="col-sm-10">
+                                <input readonly class="form-control" type="email" name="correo" value="{{ user_registrado.correo }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ trans('user_pais') }}</label>
+                            <div class="col-sm-10">
+                                <select required="required" class="form-control" name="pais">
+                                    <option value="{{ p.id }}">{{ user_registrado.pais.nombre }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">{{ trans('pasaporte') }}</label>
+                            <div class="col-sm-10">
+                                <input readonly class="form-control" type="text" name="pasaporte" value="{{ user_registrado.pasaporte }}"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="col-sm-2">{{ trans('al_tipo_cliente') }}</span>
+                            <div class="col-sm-10">
+                                <b>{{ user_registrado['disponible'][0]['nombre'] ?  ' ' ~ user_registrado['disponible'][0]['nombre'] }}</b>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            {% for hc in user_registrado['disponible']['cupos'] %}
+                            <div class="col-xs-12 col-md-6">
+                                <div class="well">
+                                    <div>
+                                        {{ trans('al_habitacion') }}: {{ hc.nombre_habitacion }}
+                                    </div>
+                                    <div>
+                                        {{ trans('al_plan_alojamiento') }}: {{ hc.nombre_plan }}
+                                    </div>
+                                    <div>
+                                        {{ trans('al_desde') }}: {{ hc.fecha_cupo_inicio }}
+                                    </div>
+                                    <div>
+                                        {{ trans('al_hasta') }}: {{ hc.fecha_cupo_fin }}
+                                    </div>
+                                    <div>
+                                        {{ trans('al_cupos_diario') }}: {{ hc.cupos_dias }}
+                                    </div>
+                                    <div>
+                                        {{ trans('al_cupos') }}: {{ hc.cupos }}
+                                    </div>
+                                    <div>
+                                        {{ trans('al_descuento') }}: {{ hc.descuento }}%
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab_edit" class="tab-pane {{ app.isPost ? 'active' : '' }}">
+
+                    {{ form_open('', {'name' : 'form_edicion_registro', 'class': 'form-horizontal'}) }}
+                    <div class="form_msg  verdana">{{ flash_error }}</div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ trans('nombre_completo') }}</label>
+                        <div class="col-sm-10">
+                            <input required="required" class="form-control" type="text" name="nombre" value="{{ set_value('nombre', user_registrado.nombre) }}"/>
+                            <span class="help-block">{{ form_error('nombre')|raw }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ trans('correo') }}</label>
+                        <div class="col-sm-10">
+                            <input required="required" class="form-control" type="email" name="correo" value="{{ set_value('correo', user_registrado.correo) }}"/>
+                            <span class="help-block">{{ form_error('correo')|raw }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ trans('user_pais') }}</label>
+                        <div class="col-sm-10">
+                            <select required="required" class="form-control" name="pais">
+                                {% set paises = app_paises() %}
+                                {% for p in paises %}
+                                    {% set selected = (user_registrado.pais.id == p.id)?'selected="selected"':'' %}
+                                    <option {{ selected }} value="{{ p.id }}">{{ p.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <span class="help-block">{{ form_error('pais')|raw }}</span>
+                        </div>
+                    </div>
+
+                    {% set pasaporte = (user_registrado.pasaporte == 0)?'':user_registrado.pasaporte %}
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ trans('pasaporte') }}</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="text" name="pasaporte" value="{{ set_value('pasaporte', user_registrado.pasaporte) }}"/>
+                            <span class="help-block">{{ form_error('pasaporte')|raw }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ trans('contrasenna') }}</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="password" name="password_edit" value="{{ set_value('password_edit') }}"/>
+                            <span class="help-block">{{ form_error('password_edit')|raw }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{{ trans('repetir_contrasenna') }}</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="password" name="password_edit_confir" value="{{ set_value('password_edit_confir') }}"/>
+                            <span class="help-block">{{ form_error('password_edit_confir')|raw }}</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" class="btn btn-default buttom roman" value="{{ trans('guardar') }}"/>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container">
+	<div class="row" style="padding-top: 200px;">
+		<div class="col-sm-3">
+			{{ menu_vertical({'items': items,'item_activo': item_activo}) }}
+		</div>
+		<div class="col-sm-9">
+			{% for r in reservas %}
+				{{ r.options.template_historial|raw }}
+
+				<div class="row">
+					<div class="col-sm-12">
+						{{ trans('user_pagos_pendientes') }}
+					</div>
+
+					{% for c in r.options.calendario %}
+						<div class="col-sm-12">
+							{{ app_str_date(c.fecha) }}
+
+							{% if c.pago_porciento == 't' %}
+								{{ c.precio }}
+							{% else %}
+								{{ app_rate_cambio(c.precio,'smb') }}
+							{% endif %}
+
+							{% if c.estado == 't' %}
+								{{ trans('estado_calendario_pagado') }}
+							{% else %}
+								<a class="btn btn-default" href="{{ base_url(trans('ruta_pagar_calendario',{'producto':r.options.tipo,'id':c.id})) }}">{{ trans('pagar') }}</a>
+							{% endif %}
+						</div>
+						<hr/>
+					{% endfor %}
+
+				</div>
+			{% else %}
+				{{ trans('error_no_se_encontraron_elementos') }}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

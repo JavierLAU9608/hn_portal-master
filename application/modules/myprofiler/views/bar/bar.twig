@@ -1,0 +1,120 @@
+{% set profiler = getProfilerResumen() %}
+
+<script>
+    $(document).ajaxComplete(function (event, xhr, settings) {
+
+        if (settings.url.indexOf("{{ base_url("profiler/resumen") }}") !== -1) {
+            return;
+        }
+        if (settings.url.indexOf("{{ base_url("profiler/preference") }}") !== -1) {
+            return;
+        }
+
+        try {
+            var c = $('#profiler-ajax-count');
+            c.html(parseInt(c.html()) + 1);
+            c.addClass('btn-danger');
+            blink(c);
+
+            $.ajax({
+                method: 'get',
+                url: '{{ base_url("profiler/resumen") }}',
+                dataType: 'JSON',
+                data: {},
+                success: function (data) {
+                    setProfileItem($('#profiler-db-count'), data.db);
+                    setProfileItem($('#profiler-lang-count'), data.lang);
+                    setProfileItem($('#profiler-email-count'), data.email);
+                }
+            });
+        } catch (e) {
+        }
+    });
+
+    function setProfileItem(obj, new_cant)
+    {
+        var cant = parseInt(obj.html());
+        if (cant != new_cant) {
+            $('#profiler-bar').show();
+            obj.html(new_cant);
+            obj.addClass('btn-danger');
+
+            blink(obj);
+        }
+    }
+
+    function blink(obj)
+    {
+        var f = function () {
+            if (obj.hasClass('btn-primary')) {
+                obj.removeClass('btn-primary')
+            } else {
+                obj.addClass('btn-primary')
+            }
+        };
+        for (var i = 200; i < 1800; i+=100) {
+            window.setTimeout(f, i);
+        }
+    }
+
+    function toggleProfiler() {
+        try {
+            var bar = $('#profiler-bar');
+            bar.toggle();
+
+            $.ajax({
+                method: 'get',
+                url: '{{ base_url("profiler/preference") }}',
+                //dataType: 'JSON',
+                data: {'option': 'visible_bar', 'value': bar.css('display')},
+                cache: false
+            });
+        } catch (e){}
+
+    }
+</script>
+
+<div id="profiler-bar" style="display: {{ profiler.preference.visible_bar }}">
+    <nav class="navbar navbar-inverse navbar-fixed-bottom" style="z-index: 10000;">
+        <div class="navbar-left">
+            <a target="_blank" class="navbar-brand" href="{{ profiler.preference.userguide_url }}"><i class="glyphicon glyphicon-question-sign"></i></a>
+            <a target="_blank" class="navbar-brand" href="{{ profiler.preference.panel_url }}"><i class="glyphicon glyphicon-lock"></i></a>
+
+            <a class="navbar-brand hidden-xs hidden-sm" style="cursor: default">@{{ profiler.controller|capitalize }}/{{ profiler.method }}</a>
+            <a class="navbar-brand" style="cursor: default">{{ elapseTime(profiler.time_start) }} ms</a>
+            <a class="navbar-brand" style="cursor: default">{{ profiler.memory }} MB</a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-left">
+            <li>
+                <a href="{{ base_url('profiler') }}" target="_blank" title="Consultas SQL">
+                    <i class="glyphicon glyphicon-tasks"></i> <span class="badge {{ profiler.db > 50 ? 'btn-primary' : null }}" id="profiler-db-count">{{ profiler.db }}</span></a>
+            </li>
+            <li>
+                <a href="{{ base_url('profiler/lang') }}" target="_blank" title="Traducciones faltantes">
+                    <i class="glyphicon glyphicon-text-background"></i> <span class="badge {{ profiler.lang > 0 ? 'btn-primary' : null }}" id="profiler-lang-count">{{ profiler.lang }}</span></a>
+            </li>
+            <li>
+                <a href="{{ base_url('profiler/email') }}" target="_blank" title="Correos enviados">
+                    <i class="glyphicon glyphicon-envelope"></i> <span class="badge {{ profiler.email > 0 ? 'btn-primary' : null }}" id="profiler-email-count">{{ profiler.email }}</span></a>
+            </li>
+            <li id="profiler-ajax-item">
+                <a href="{{ base_url('profiler') }}" target="_blank" title="Peticiones Ajax">
+                    <i class="glyphicon glyphicon-transfer"></i> <span class="badge" id="profiler-ajax-count">0</span></a>
+            </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right hidden-xs" style="margin-right: 40px;">
+            <li>
+                <a style="cursor: default">MyProfiler v{{ profiler.version }} - CI v{{ getCIVersion() }}</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<div style="position: fixed; right: 0; bottom: 0px; z-index: 10000;">
+    <a style="height: 51px;padding-top: 17px" id="profiler-btn-toggle" class="btn btn-primary" href="javascript:toggleProfiler()">
+        <i class="glyphicon glyphicon-object-align-right"></i>
+    </a>
+</div>
+

@@ -1,0 +1,16 @@
+
+{% set nombre_trans = app_traduccion('evento','evento_tipos_idioma',NULL,'tipo_servicio_fk',tipo_servicio.id,tipo_servicio) %}
+{#{% set titulo = trans('rt_restaurante_nombre',{'nombre':restaurante_trans.nombre}) %}#}
+{#{% set tipo = app_traduccion('restaurante','restaurante_tipo_idioma','nombre','tipo_fk',tipo.id,tipo.nombre) %}#}
+{#{% set subtitle = (view == 'open')?trans('rt_restaurante')~' '~tipo : trans('rt_restaurante_menu') %}#}
+{#{% set texto_presentacion = restaurante_trans.descripcion %}#}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+            <h2>{{ nombre_trans.nombre }}  </h2>
+            {{ nombre_trans.descripcion | raw }}
+		</div>
+	</div>
+
+{% endblock %}

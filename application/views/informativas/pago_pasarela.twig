@@ -1,0 +1,32 @@
+{% extends 'base.twig' %}
+
+{% block pixel %}
+    <!-- Event facebook -->
+    <script>
+        fbq('track', 'Purchase', {
+            'value': {{ amount }},
+            'currency': '{{ currency }}'
+        });
+    </script>
+    <!-- end Event facebook -->
+
+    <!-- Event snippet for Ventas conversion page -->
+    <script>
+        gtag('event', 'conversion', {
+            'send_to': 'AW-861553772/eNrjCNiqmpgBEOyI6ZoD',
+            'value': {{ amount }},
+            'currency': '{{ currency }}',
+            'transaction_id': '{{ transaction }}' });
+    </script>
+    <!-- End Event snippet for Ventas conversion page -->
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="padding-top: 200px;">
+            <div class="col-sm-12">
+                <div class="alert alert-info">{{ trans('reserva_texto_pago_pasarela_aceptado')|raw }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,80 @@
+
+{% set restaurante_trans = app_traduccion('restaurante','restaurante_idioma_rest',NULL,'restaurante_fk',restaurante.id,restaurante) %}
+{% set titulo = trans('rt_restaurante_nombre',{'nombre':restaurante_trans.nombre}) %}
+{% set tipo = app_traduccion('restaurante','restaurante_tipo_idioma','nombre','tipo_fk',tipo.id,tipo.nombre) %}
+{% set subtitle = (view == 'open')?trans('rt_restaurante')~' '~tipo : trans('rt_restaurante_menu') %}
+{% set texto_presentacion = restaurante_trans.descripcion %}
+
+{% block content %}
+	<div class="container">
+        <div class="row margin-bottom-40">
+            <div class="col-md-12 col-sm-12 content-center margin-bottom-30">
+                <h2 class="uppercase text-price">{{ titulo }}</h2>
+            </div>
+            <!-- BEGIN CONTENT -->
+            <div class="col-md-12 col-sm-12"
+                <div class="content-page">
+                    <div class="row margin-bottom-40">
+                        {% for menu in menus %}
+                            {% set menu_trans = app_traduccion('restaurante','restaurante_menu_idioma','nombre','menu_fk',menu.id,menu.nombre) %}
+                            {% set recomended = menu.recomendado == 't'? true: false %}
+                            <!-- Pricing -->
+                            <div class="col-md-4">
+                                <div class="pricing hover-effect">
+                                    <div class="pricing-head">
+                                        <h3>
+                                            {{ menu_trans }}
+                                            {% if recomended %}
+                                                <img src="{{ base_url('web/img/recomendado.png') }}"/>
+                                            {% endif %}
+                                        </h3>
+                                        <h4>
+                                            {% if menu.precio %}
+                                                {{ trans('rt_precio_por_pax') }} {{ menu.precio }} <br/>
+                                            {% endif %}
+                                        </h4>
+                                    </div>
+
+
+                                    <ul class="pricing-content list-unstyled">
+                                        {% for p in menu.platos %}
+                                            <li>
+                                                <i class="fa fa-tags"></i>
+                                                {% if p|length > 0%}
+                                                    {% set tipo_plato_traduccion = app_traduccion('restaurante','restaurante_tipop_idioma','nombre','tipo_plato_fk',p[0]['id_tipo_plato'],p[0]['nombre_tipo_plato']) %}
+                                                    <b>{{ tipo_plato_traduccion }}: </b>
+
+                                                    {% for o in p %}
+                                                        {% set plato_traduccion = app_traduccion('restaurante','restaurante_plato_idioma','nombre','plato_fk',o.id_plato,o.nombre_plato) %}
+                                                        {{ plato_traduccion }},
+                                                    {% endfor %}
+
+                                                {% else %}
+                                                    {{ p }}
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {#<div class="pricing-footer">#}
+                                        {#<p>#}
+                                            {#{% if restaurante.menor_precio > 0 %}#}
+                                                {#{{ trans('precio') }} {{ app_rate_cambio(restaurante.menor_precio,'smb') }}#}
+                                            {#{% endif %}#}
+                                        {#</p>#}
+                                    {#</div>#}
+                                </div>
+                            </div>
+                            <!--//End Pricing -->
+
+                        {% endfor %}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+	</div>
+
+{% endblock %}

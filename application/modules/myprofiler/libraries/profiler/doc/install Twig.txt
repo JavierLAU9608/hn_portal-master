@@ -1,0 +1,62 @@
+1- Copiar la carpeta de Twig en la carpeta application/libraries
+2- Copiar la clase Twig en application/libraries
+3- Modificar la clase Twig para que cargue el autoloader de lib/Twig/Autoloader.php  del paso 1
+4- Cargar twig en el controlador que lo va a usar $this->configTwig() agregando esto métodos
+
+    private function configTwig()
+    {
+        $config_twig = [
+            // funciones disponibles desde twig
+            'functions' => ['base_url'], // para usar esta función cargue el helper 'url' en el autoload
+            'debug' => ENVIRONMENT !== 'production'
+        ];
+
+        // lugares donde están las vistas (primero en modules/<circuito>/views, luego en views)
+        $modules = Modules::list_modules();
+        foreach (Modules::$locations as $location => $offset) {
+            foreach ($modules as $module) {
+                $dir = $location . $module. '/views/';
+                if (is_dir($dir)) {
+                    $config_twig['paths'][] = $dir;
+                }
+            }
+        }
+        $config_twig['paths'][] = VIEWPATH;
+
+        // agregar estas funciones en modo desarrollo
+        if (ENVIRONMENT !== 'production') {
+            $config_twig['functions'][] = 'elapseTime';
+            $config_twig['functions'][] = 'getProfilerResumen';
+            $config_twig['paths'][] = APPPATH . 'modules/myprofiler/views/';
+        }
+
+        // cargar twig
+        $this->load->library('twig', $config_twig);
+
+        $ajax = $this->input->is_ajax_request();
+        // ignorar cuando la petición es ajax (para evitar las consultas innecesarias)
+        if (!$ajax) {
+            // variables globales de twig
+            $this->twig->addGlobal('app', $this->getApp());
+        }
+    }
+
+    /**
+     * Crear variables accesibles desde todas las plantillas de la forma app.site_name
+     *
+     * @return array
+     */
+    private function getApp()
+    {
+        $app = [
+            'site_name' => 'Prueba de twig',
+            'env' => ENVIRONMENT,
+        ];
+        return $app;
+    }
+
+5- cargar una vista en el controlador de esta forma:
+
+    $this->twig->display('welcome', array());
+
+6- probar la vista agregando {{ app.env }}

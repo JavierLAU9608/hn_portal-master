@@ -1,0 +1,33 @@
+{% set restaurante = app_get_restaurante(datos_adicionales.id_restaurante) %}
+
+<div class="row">
+	<div class="col-sm-4">
+		{{ trans('serivicio_nombre', {'nombre': trans('restaurante')}) }}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('restaurante') }}: {{ restaurante.nombre }}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('rt_dia_reservacion') }}: {{ app_str_date(datos_adicionales.fecha) }}
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-4">
+		{{ datos_adicionales.no_reserva }}
+	</div>
+
+	<div class="col-sm-4">
+		{% if datos_adicionales.estado == 4 %}
+			<a href="{{ trans('ruta_voucher_producto', {'producto':datos_adicionales.tipo,'id':datos_adicionales.id_reserva}) }}" >{{ trans('voucher') }}</a>
+			{% if datos_adicionales.fecha > app_now() %}
+				<a class="btn btn-default" href="{{ trans('ruta_cancelar_producto_pagado',{'producto':datos_adicionales.tipo,'id':datos_adicionales.id_reserva}) }}" >{{ trans('cancelar') }}</a>
+			{% endif %}
+		{% endif %}
+	</div>
+	<div class="col-sm-4">
+		{{ trans('precio') }}: {{ app_rate_cambio(producto.price,'smb') }}
+	</div>
+</div>
+
+<hr/>

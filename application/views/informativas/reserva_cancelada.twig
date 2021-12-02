@@ -1,0 +1,20 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+<div class="container">
+	<div class="row" style="padding-top: 200px;">
+		<div class="col-sm-12">
+			<div class="alert alert-info">{{ trans('reserva_texto_cancelacion_reserva')|raw }}</div>
+		</div>
+		<div class="col-sm-12">
+			<b>{{ trans('reserva_politica_cancelacion_aplicada')|raw }}</b><br/>
+			{{ trans('titular_tarjeta_credito') }} {{ titualar_tarjeta }}<br/>
+			{{ trans('reserva_numero_reserva') }} {{ no_reserva }}<br/>
+			{{ trans('reserva_descuento_cancelacion') }} {{ descuento }}<br/>
+			{{ trans('reserva_reintegro_cancelacion') }} {{ reintegro }}<br/>
+			<br/>
+			<a class="btn btn-default" href="{{ base_url(trans('ruta_historial')) }}">{{ trans('user_historial') }}</a>
+		</div>
+	</div>
+</div>
+{% endblock %}

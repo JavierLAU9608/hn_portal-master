@@ -1,0 +1,18 @@
+{% extends 'base.twig' %}
+
+{% block keywords %}{{ trans('seo_keywords_noticias') }}{% endblock %}
+{% block description %}{{ trans('seo_description_noticias') }}{% endblock %}
+
+{% set noticia_trans = app_traduccion('frontend','frontend_noticia_idioma',NULL,'noticia_fk',noticia.id, noticia) %}
+
+{% block content %}
+    <div class="container">
+        <div class="row" style="padding-top: 200px;">
+            <div class="col-sm-12">
+                <img class="border left margen_r max_width" title="{{ noticia_trans.titulo }}" src="{{ app_url_admin()~('/admin/noticia/noticia-'~ noticia.imagen) }}"/>
+
+                <p>{{ noticia_trans.texto|raw }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="{{ app.current_lang['codigo'] }}">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <base href="{{ base_url() }}"/>
+    <title>Pasarela</title>
+    <meta name="keywords" content="pasarela"/>
+    <meta name="description" content="pasarela de desarrollo"/>
+
+    <!-- Global styles BEGIN -->
+    <link href="web/css/bootstrap.min.css" rel="stylesheet">
+    <link href="web/css/font-awesome.min.css" rel="stylesheet">
+    {#<link href="web/theme/assets/global/css/components.css" rel="stylesheet">#}
+    <!-- Theme styles END -->
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 class="text-center">Pasarela de desarrollo</h1>
+            </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div style="margin-bottom: 40px;">
+                        <h3>Detalles del pago</h3>
+                    </div>
+
+                    <div class="col-sm-12 alert alert-warning" style="display: {{ error != null ? 'block' : 'none' }}">
+                        {{ error }}
+                    </div>
+
+                    <div class="form-horizontal">
+                        {% if amex == null %}
+                            <div class="form-group">
+                                <label class="col-sm-3 text-right">Tarjeta:</label>
+                                <div class="col-sm-9">
+                                    <span class="label label-danger">¡La tarjeta no ha llegado a la pasarela!</span>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <img class="img-thumbnail responsive" src="{{ tarjetas_url ~ amex ~ '.jpg' }}" alt=""/>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="form-group">
+                            <label class="col-sm-3 text-right">Comercio:</label>
+                            <div class="col-sm-9">
+                                {{ comercio }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 text-right">Transacción:</label>
+                            <div class="col-sm-9">
+                                {{ transaccion }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 text-right">Moneda:</label>
+                            <div class="col-sm-9">
+                                {{ monedas[moneda][0] }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 text-right">Monto:</label>
+                            <div class="col-sm-9">
+                                {{ importe2 }} {{ monedas[moneda][1] }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+
+                <div style="margin-bottom: 40px;">
+                    <h3>Detalles de la respuesta</h3>
+                </div>
+
+                <div class="col-sm-12">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a aria-controls="form_aceptar" role="tab" data-toggle="tab" href="#form_aceptar">Aceptar
+                                pago
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a aria-controls="form_denegar" role="tab" data-toggle="tab" href="#form_denegar">Rechazar
+                                pago
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" style="margin-top: 20px;">
+                        <div role="tabpanel" class="tab-pane active" id="form_aceptar">
+
+                            <div class="form-horizontal">
+                                <input type="hidden" value="{{ comerse }}"/>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Pagado a:</label>
+                                    <div class="col-sm-9">
+                                        <input name="comercio" readonly class="form-control" type="text" value="{{ comerse }}"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Transacción:</label>
+                                    <div class="col-sm-9">
+                                        <input name="transaccion" readonly class="form-control" type="text" value="{{ transaccion }}"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Moneda:</label>
+                                    <div class="col-sm-9">
+                                        <input name="moneda" readonly class="form-control" type="text" value="{{ moneda }}"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Monto:</label>
+                                    <div class="col-sm-9">
+                                        <input name="monto" readonly class="form-control" type="text" value="{{ importe }}"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-9 col-sm-offset-3">
+                                        <input id="aceptar" class="btn btn-success" type="button" value="Aceptar"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane" role="tabpanel" id="form_denegar">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Error code:</label>
+                                    <div class="col-sm-9">
+                                        <input id="err_code" class="form-control" type="text" value="080"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Error msg:</label>
+                                    <div class="col-sm-9">
+                                        <input id="err_msg" class="form-control" type="text" value="No se puede obtener..."/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-9 col-sm-offset-3">
+                                        <input id="denegar" class="btn btn-danger" type="button" value="Denegar"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="curl_container" class="row" style="display: none">
+            <div class="col-sm-12">
+                <hr/>
+                <a id="btn_back" class="btn btn-primary" href="javascript:go()">Regresar a la app</a>
+                <hr/>
+                <h4>Respuesta de CURL:</h4>
+
+                <div class="well" id="curl_div"></div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="web/js/jquery.min.js" type="text/javascript"></script>
+    <script src="web/js/jquery-migrate.min.js" type="text/javascript"></script>
+    <script src="web/js/bootstrap.min.js"></script>
+
+    <script type="application/javascript">
+        var data = {
+            monto: '{{ importe }}',
+            transaccion: '{{ transaccion }}',
+            firma: '{{ firma_a }}',
+            moneda: '{{ moneda }}',
+            fecha: '{{ fecha }}',
+            comercio: '{{ comercio }}',
+            amex: '{{ amex }}',
+            resultado: 'A',
+            codigo: '{{ codigo }}',
+            comerc: '{{ comerse }}',
+            error: '',
+            importe: '{{ importe }}'
+        };
+
+        function go() {
+            var form = document.createElement("form");
+
+            form.action = '{{ base_url(pasarela_redirect) }}';
+            form.method = "POST";
+
+            for (var key in data) {
+                var input = document.createElement("input");
+                input.name = key;
+                input.value = data[key];
+                input.type = 'hidden';
+
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function enviar() {
+            $('#curl_container').hide();
+            $('#curl_div').html('');
+
+            var curl = '{{ base_url(pasarela_curl) }}';
+
+            $.ajax({
+                url: curl,
+                data: data,
+                method: 'POST',
+                dataType: 'JSON',
+                cache: false,
+                success: function (data) {
+                    $('#curl_div').html(data.msg);
+                    $('#curl_container').toggle('slow');
+                },
+                error: function (a) {
+                    $('#curl_div').html(a.responseText);
+                    $('#curl_container').toggle('slow');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#aceptar').click(function () {
+                data.resultado = 'A';
+                data.firma = '{{ firma_a }}';
+                data.error = '';
+
+                enviar();
+            });
+
+            $('#denegar').click(function () {
+                data.resultado = 'D';
+                data.firma = '{{ firma_d }}';
+                data.error = $('#err_code').val() + ' - ' + $('#err_msg').val();
+
+                enviar();
+            });
+        });
+    </script>
+</body>
+</html>
